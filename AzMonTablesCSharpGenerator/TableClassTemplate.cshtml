@@ -1,0 +1,16 @@
+@using FluentKusto.AzMonTablesCSharpGenerator
+
+
+namespace FluentKusto
+{
+    public class @Model.Table
+    {
+        @foreach (var column in @Model.Columns)
+        {
+        <text>
+        ///@column.Description
+        public @column.Type @column.Name {get; set;}
+        </text>
+        }
+    }
+}
