@@ -1,0 +1,740 @@
+
+
+    public static ITabularOperator<AppAvailabilityResults> AppAvailabilityResults{ get; set; }
+    
+    public static ITabularOperator<AppBrowserTimings> AppBrowserTimings{ get; set; }
+    
+    public static ITabularOperator<AppDependencies> AppDependencies{ get; set; }
+    
+    public static ITabularOperator<AppEvents> AppEvents{ get; set; }
+    
+    public static ITabularOperator<AppMetrics> AppMetrics{ get; set; }
+    
+    public static ITabularOperator<AppPageViews> AppPageViews{ get; set; }
+    
+    public static ITabularOperator<AppPerformanceCounters> AppPerformanceCounters{ get; set; }
+    
+    public static ITabularOperator<AppRequests> AppRequests{ get; set; }
+    
+    public static ITabularOperator<AppServiceConsoleLogs> AppServiceConsoleLogs{ get; set; }
+    
+    public static ITabularOperator<AppSystemEvents> AppSystemEvents{ get; set; }
+    
+    public static ITabularOperator<AppTraces> AppTraces{ get; set; }
+    
+    public static ITabularOperator<ContainerLog> ContainerLog{ get; set; }
+    
+    public static ITabularOperator<FunctionAppLogs> FunctionAppLogs{ get; set; }
+    
+    public static ITabularOperator<AACAudit> AACAudit{ get; set; }
+    
+    public static ITabularOperator<AADManagedIdentitySignInLogs> AADManagedIdentitySignInLogs{ get; set; }
+    
+    public static ITabularOperator<AADNonInteractiveUserSignInLogs> AADNonInteractiveUserSignInLogs{ get; set; }
+    
+    public static ITabularOperator<AADProvisioningLogs> AADProvisioningLogs{ get; set; }
+    
+    public static ITabularOperator<AADRiskyUsers> AADRiskyUsers{ get; set; }
+    
+    public static ITabularOperator<AADServicePrincipalSignInLogs> AADServicePrincipalSignInLogs{ get; set; }
+    
+    public static ITabularOperator<AADUserRiskEvents> AADUserRiskEvents{ get; set; }
+    
+    public static ITabularOperator<ACICollaborationAudit> ACICollaborationAudit{ get; set; }
+    
+    public static ITabularOperator<ADFSSignInLogs> ADFSSignInLogs{ get; set; }
+    
+    public static ITabularOperator<ADPAudit> ADPAudit{ get; set; }
+    
+    public static ITabularOperator<AEWAuditLogs> AEWAuditLogs{ get; set; }
+    
+    public static ITabularOperator<AppServiceIPSecAuditLogs> AppServiceIPSecAuditLogs{ get; set; }
+    
+    public static ITabularOperator<AzureActivity> AzureActivity{ get; set; }
+    
+    public static ITabularOperator<HDInsightRangerAuditLogs> HDInsightRangerAuditLogs{ get; set; }
+    
+    public static ITabularOperator<LAQueryLogs> LAQueryLogs{ get; set; }
+    
+    public static ITabularOperator<MicrosoftHealthcareApisAuditLogs> MicrosoftHealthcareApisAuditLogs{ get; set; }
+    
+    public static ITabularOperator<Alert> Alert{ get; set; }
+    
+    public static ITabularOperator<AlertHistory> AlertHistory{ get; set; }
+    
+    public static ITabularOperator<AutoscaleEvaluationsLog> AutoscaleEvaluationsLog{ get; set; }
+    
+    public static ITabularOperator<AutoscaleScaleActionsLog> AutoscaleScaleActionsLog{ get; set; }
+    
+    public static ITabularOperator<ComputerGroup> ComputerGroup{ get; set; }
+    
+    public static ITabularOperator<Operation> Operation{ get; set; }
+    
+    public static ITabularOperator<Usage> Usage{ get; set; }
+    
+    public static ITabularOperator<WorkloadDiagnosticLogs> WorkloadDiagnosticLogs{ get; set; }
+    
+    public static ITabularOperator<AACHttpRequest> AACHttpRequest{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesAccountLogon> AADDomainServicesAccountLogon{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesAccountManagement> AADDomainServicesAccountManagement{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesDirectoryServiceAccess> AADDomainServicesDirectoryServiceAccess{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesLogonLogoff> AADDomainServicesLogonLogoff{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesPolicyChange> AADDomainServicesPolicyChange{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesPrivilegeUse> AADDomainServicesPrivilegeUse{ get; set; }
+    
+    public static ITabularOperator<ABSBotRequests> ABSBotRequests{ get; set; }
+    
+    public static ITabularOperator<ACICollaborationAudit> ACICollaborationAudit{ get; set; }
+    
+    public static ITabularOperator<ACSAuthIncomingOperations> ACSAuthIncomingOperations{ get; set; }
+    
+    public static ITabularOperator<ACSBillingUsage> ACSBillingUsage{ get; set; }
+    
+    public static ITabularOperator<ACSChatIncomingOperations> ACSChatIncomingOperations{ get; set; }
+    
+    public static ITabularOperator<ACSSMSIncomingOperations> ACSSMSIncomingOperations{ get; set; }
+    
+    public static ITabularOperator<AddonAzureBackupAlerts> AddonAzureBackupAlerts{ get; set; }
+    
+    public static ITabularOperator<AddonAzureBackupJobs> AddonAzureBackupJobs{ get; set; }
+    
+    public static ITabularOperator<AddonAzureBackupPolicy> AddonAzureBackupPolicy{ get; set; }
+    
+    public static ITabularOperator<AddonAzureBackupProtectedInstance> AddonAzureBackupProtectedInstance{ get; set; }
+    
+    public static ITabularOperator<AddonAzureBackupStorage> AddonAzureBackupStorage{ get; set; }
+    
+    public static ITabularOperator<ADFActivityRun> ADFActivityRun{ get; set; }
+    
+    public static ITabularOperator<ADFPipelineRun> ADFPipelineRun{ get; set; }
+    
+    public static ITabularOperator<ADFTriggerRun> ADFTriggerRun{ get; set; }
+    
+    public static ITabularOperator<ADPAudit> ADPAudit{ get; set; }
+    
+    public static ITabularOperator<ADPDiagnostics> ADPDiagnostics{ get; set; }
+    
+    public static ITabularOperator<ADPRequests> ADPRequests{ get; set; }
+    
+    public static ITabularOperator<AegDeliveryFailureLogs> AegDeliveryFailureLogs{ get; set; }
+    
+    public static ITabularOperator<AegPublishFailureLogs> AegPublishFailureLogs{ get; set; }
+    
+    public static ITabularOperator<AEWAuditLogs> AEWAuditLogs{ get; set; }
+    
+    public static ITabularOperator<AmlComputeClusterEvent> AmlComputeClusterEvent{ get; set; }
+    
+    public static ITabularOperator<AmlComputeClusterNodeEvent> AmlComputeClusterNodeEvent{ get; set; }
+    
+    public static ITabularOperator<AmlComputeCpuGpuUtilization> AmlComputeCpuGpuUtilization{ get; set; }
+    
+    public static ITabularOperator<AmlComputeJobEvent> AmlComputeJobEvent{ get; set; }
+    
+    public static ITabularOperator<AmlOnlineEndpointConsoleLog> AmlOnlineEndpointConsoleLog{ get; set; }
+    
+    public static ITabularOperator<AmlRunStatusChangedEvent> AmlRunStatusChangedEvent{ get; set; }
+    
+    public static ITabularOperator<ApiManagementGatewayLogs> ApiManagementGatewayLogs{ get; set; }
+    
+    public static ITabularOperator<AppPlatformLogsforSpring> AppPlatformLogsforSpring{ get; set; }
+    
+    public static ITabularOperator<AppPlatformSystemLogs> AppPlatformSystemLogs{ get; set; }
+    
+    public static ITabularOperator<AppServiceAppLogs> AppServiceAppLogs{ get; set; }
+    
+    public static ITabularOperator<AppServiceAuditLogs> AppServiceAuditLogs{ get; set; }
+    
+    public static ITabularOperator<AppServiceConsoleLogs> AppServiceConsoleLogs{ get; set; }
+    
+    public static ITabularOperator<AppServiceFileAuditLogs> AppServiceFileAuditLogs{ get; set; }
+    
+    public static ITabularOperator<AppServiceHTTPLogs> AppServiceHTTPLogs{ get; set; }
+    
+    public static ITabularOperator<AppServiceIPSecAuditLogs> AppServiceIPSecAuditLogs{ get; set; }
+    
+    public static ITabularOperator<AppServicePlatformLogs> AppServicePlatformLogs{ get; set; }
+    
+    public static ITabularOperator<AuditLogs> AuditLogs{ get; set; }
+    
+    public static ITabularOperator<AutoscaleEvaluationsLog> AutoscaleEvaluationsLog{ get; set; }
+    
+    public static ITabularOperator<AutoscaleScaleActionsLog> AutoscaleScaleActionsLog{ get; set; }
+    
+    public static ITabularOperator<AzureActivity> AzureActivity{ get; set; }
+    
+    public static ITabularOperator<AzureDiagnostics> AzureDiagnostics{ get; set; }
+    
+    public static ITabularOperator<AzureMetrics> AzureMetrics{ get; set; }
+    
+    public static ITabularOperator<BaiClusterEvent> BaiClusterEvent{ get; set; }
+    
+    public static ITabularOperator<BaiClusterNodeEvent> BaiClusterNodeEvent{ get; set; }
+    
+    public static ITabularOperator<BaiJobEvent> BaiJobEvent{ get; set; }
+    
+    public static ITabularOperator<BlockchainApplicationLog> BlockchainApplicationLog{ get; set; }
+    
+    public static ITabularOperator<BlockchainProxyLog> BlockchainProxyLog{ get; set; }
+    
+    public static ITabularOperator<CoreAzureBackup> CoreAzureBackup{ get; set; }
+    
+    public static ITabularOperator<DatabricksAccounts> DatabricksAccounts{ get; set; }
+    
+    public static ITabularOperator<DatabricksClusters> DatabricksClusters{ get; set; }
+    
+    public static ITabularOperator<DatabricksDBFS> DatabricksDBFS{ get; set; }
+    
+    public static ITabularOperator<DatabricksJobs> DatabricksJobs{ get; set; }
+    
+    public static ITabularOperator<DatabricksNotebook> DatabricksNotebook{ get; set; }
+    
+    public static ITabularOperator<DatabricksSecrets> DatabricksSecrets{ get; set; }
+    
+    public static ITabularOperator<DatabricksSQLPermissions> DatabricksSQLPermissions{ get; set; }
+    
+    public static ITabularOperator<DatabricksSSH> DatabricksSSH{ get; set; }
+    
+    public static ITabularOperator<DatabricksWorkspace> DatabricksWorkspace{ get; set; }
+    
+    public static ITabularOperator<FailedIngestion> FailedIngestion{ get; set; }
+    
+    public static ITabularOperator<FunctionAppLogs> FunctionAppLogs{ get; set; }
+    
+    public static ITabularOperator<HDInsightAmbariClusterAlerts> HDInsightAmbariClusterAlerts{ get; set; }
+    
+    public static ITabularOperator<HDInsightAmbariSystemMetrics> HDInsightAmbariSystemMetrics{ get; set; }
+    
+    public static ITabularOperator<HDInsightHadoopAndYarnLogs> HDInsightHadoopAndYarnLogs{ get; set; }
+    
+    public static ITabularOperator<HDInsightHadoopAndYarnMetrics> HDInsightHadoopAndYarnMetrics{ get; set; }
+    
+    public static ITabularOperator<HDInsightHBaseLogs> HDInsightHBaseLogs{ get; set; }
+    
+    public static ITabularOperator<HDInsightHBaseMetrics> HDInsightHBaseMetrics{ get; set; }
+    
+    public static ITabularOperator<HDInsightHiveAndLLAPLogs> HDInsightHiveAndLLAPLogs{ get; set; }
+    
+    public static ITabularOperator<HDInsightHiveAndLLAPMetrics> HDInsightHiveAndLLAPMetrics{ get; set; }
+    
+    public static ITabularOperator<HDInsightHiveQueryAppStats> HDInsightHiveQueryAppStats{ get; set; }
+    
+    public static ITabularOperator<HDInsightHiveTezAppStats> HDInsightHiveTezAppStats{ get; set; }
+    
+    public static ITabularOperator<HDInsightJupyterNotebookEvents> HDInsightJupyterNotebookEvents{ get; set; }
+    
+    public static ITabularOperator<HDInsightKafkaLogs> HDInsightKafkaLogs{ get; set; }
+    
+    public static ITabularOperator<HDInsightKafkaMetrics> HDInsightKafkaMetrics{ get; set; }
+    
+    public static ITabularOperator<HDInsightOozieLogs> HDInsightOozieLogs{ get; set; }
+    
+    public static ITabularOperator<HDInsightRangerAuditLogs> HDInsightRangerAuditLogs{ get; set; }
+    
+    public static ITabularOperator<HDInsightSecurityLogs> HDInsightSecurityLogs{ get; set; }
+    
+    public static ITabularOperator<HDInsightSparkApplicationEvents> HDInsightSparkApplicationEvents{ get; set; }
+    
+    public static ITabularOperator<HDInsightSparkBlockManagerEvents> HDInsightSparkBlockManagerEvents{ get; set; }
+    
+    public static ITabularOperator<HDInsightSparkEnvironmentEvents> HDInsightSparkEnvironmentEvents{ get; set; }
+    
+    public static ITabularOperator<HDInsightSparkExecutorEvents> HDInsightSparkExecutorEvents{ get; set; }
+    
+    public static ITabularOperator<HDInsightSparkJobEvents> HDInsightSparkJobEvents{ get; set; }
+    
+    public static ITabularOperator<HDInsightSparkLogs> HDInsightSparkLogs{ get; set; }
+    
+    public static ITabularOperator<HDInsightSparkSQLExecutionEvents> HDInsightSparkSQLExecutionEvents{ get; set; }
+    
+    public static ITabularOperator<HDInsightSparkStageEvents> HDInsightSparkStageEvents{ get; set; }
+    
+    public static ITabularOperator<HDInsightSparkStageTaskAccumulables> HDInsightSparkStageTaskAccumulables{ get; set; }
+    
+    public static ITabularOperator<HDInsightSparkTaskEvents> HDInsightSparkTaskEvents{ get; set; }
+    
+    public static ITabularOperator<HDInsightStormLogs> HDInsightStormLogs{ get; set; }
+    
+    public static ITabularOperator<HDInsightStormMetrics> HDInsightStormMetrics{ get; set; }
+    
+    public static ITabularOperator<HDInsightStormTopologyMetrics> HDInsightStormTopologyMetrics{ get; set; }
+    
+    public static ITabularOperator<InsightsMetrics> InsightsMetrics{ get; set; }
+    
+    public static ITabularOperator<IoTHubDistributedTracing> IoTHubDistributedTracing{ get; set; }
+    
+    public static ITabularOperator<MCCEventLogs> MCCEventLogs{ get; set; }
+    
+    public static ITabularOperator<MCVPOperationLogs> MCVPOperationLogs{ get; set; }
+    
+    public static ITabularOperator<MicrosoftAzureBastionAuditLogs> MicrosoftAzureBastionAuditLogs{ get; set; }
+    
+    public static ITabularOperator<MicrosoftDataShareReceivedSnapshotLog> MicrosoftDataShareReceivedSnapshotLog{ get; set; }
+    
+    public static ITabularOperator<MicrosoftDataShareSentSnapshotLog> MicrosoftDataShareSentSnapshotLog{ get; set; }
+    
+    public static ITabularOperator<MicrosoftHealthcareApisAuditLogs> MicrosoftHealthcareApisAuditLogs{ get; set; }
+    
+    public static ITabularOperator<PowerBIDatasetsTenant> PowerBIDatasetsTenant{ get; set; }
+    
+    public static ITabularOperator<PowerBIDatasetsWorkspace> PowerBIDatasetsWorkspace{ get; set; }
+    
+    public static ITabularOperator<PurviewDataSensitivityLogs> PurviewDataSensitivityLogs{ get; set; }
+    
+    public static ITabularOperator<PurviewScanStatusLogs> PurviewScanStatusLogs{ get; set; }
+    
+    public static ITabularOperator<ServiceFabricOperationalEvent> ServiceFabricOperationalEvent{ get; set; }
+    
+    public static ITabularOperator<ServiceFabricReliableActorEvent> ServiceFabricReliableActorEvent{ get; set; }
+    
+    public static ITabularOperator<ServiceFabricReliableServiceEvent> ServiceFabricReliableServiceEvent{ get; set; }
+    
+    public static ITabularOperator<SignalRServiceDiagnosticLogs> SignalRServiceDiagnosticLogs{ get; set; }
+    
+    public static ITabularOperator<SigninLogs> SigninLogs{ get; set; }
+    
+    public static ITabularOperator<SQLSecurityAuditEvents> SQLSecurityAuditEvents{ get; set; }
+    
+    public static ITabularOperator<StorageBlobLogs> StorageBlobLogs{ get; set; }
+    
+    public static ITabularOperator<StorageFileLogs> StorageFileLogs{ get; set; }
+    
+    public static ITabularOperator<StorageQueueLogs> StorageQueueLogs{ get; set; }
+    
+    public static ITabularOperator<StorageTableLogs> StorageTableLogs{ get; set; }
+    
+    public static ITabularOperator<SucceededIngestion> SucceededIngestion{ get; set; }
+    
+    public static ITabularOperator<SynapseBigDataPoolApplicationsEnded> SynapseBigDataPoolApplicationsEnded{ get; set; }
+    
+    public static ITabularOperator<SynapseBuiltinSqlPoolRequestsEnded> SynapseBuiltinSqlPoolRequestsEnded{ get; set; }
+    
+    public static ITabularOperator<SynapseGatewayApiRequests> SynapseGatewayApiRequests{ get; set; }
+    
+    public static ITabularOperator<SynapseIntegrationActivityRuns> SynapseIntegrationActivityRuns{ get; set; }
+    
+    public static ITabularOperator<SynapseIntegrationPipelineRuns> SynapseIntegrationPipelineRuns{ get; set; }
+    
+    public static ITabularOperator<SynapseIntegrationTriggerRuns> SynapseIntegrationTriggerRuns{ get; set; }
+    
+    public static ITabularOperator<SynapseRbacOperations> SynapseRbacOperations{ get; set; }
+    
+    public static ITabularOperator<SynapseSqlPoolDmsWorkers> SynapseSqlPoolDmsWorkers{ get; set; }
+    
+    public static ITabularOperator<SynapseSqlPoolExecRequests> SynapseSqlPoolExecRequests{ get; set; }
+    
+    public static ITabularOperator<SynapseSqlPoolRequestSteps> SynapseSqlPoolRequestSteps{ get; set; }
+    
+    public static ITabularOperator<SynapseSqlPoolSqlRequests> SynapseSqlPoolSqlRequests{ get; set; }
+    
+    public static ITabularOperator<SynapseSqlPoolWaits> SynapseSqlPoolWaits{ get; set; }
+    
+    public static ITabularOperator<TSIIngress> TSIIngress{ get; set; }
+    
+    public static ITabularOperator<Containers> Containers{ get; set; }
+    
+    public static ITabularOperator<ContainerImageInventory> ContainerImageInventory{ get; set; }
+    
+    public static ITabularOperator<ContainerInventory> ContainerInventory{ get; set; }
+    
+    public static ITabularOperator<ContainerLog> ContainerLog{ get; set; }
+    
+    public static ITabularOperator<ContainerLogV2> ContainerLogV2{ get; set; }
+    
+    public static ITabularOperator<ContainerNodeInventory> ContainerNodeInventory{ get; set; }
+    
+    public static ITabularOperator<ContainerRegistryLoginEvents> ContainerRegistryLoginEvents{ get; set; }
+    
+    public static ITabularOperator<ContainerRegistryRepositoryEvents> ContainerRegistryRepositoryEvents{ get; set; }
+    
+    public static ITabularOperator<ContainerServiceLog> ContainerServiceLog{ get; set; }
+    
+    public static ITabularOperator<Heartbeat> Heartbeat{ get; set; }
+    
+    public static ITabularOperator<InsightsMetrics> InsightsMetrics{ get; set; }
+    
+    public static ITabularOperator<KubeEvents> KubeEvents{ get; set; }
+    
+    public static ITabularOperator<KubeHealth> KubeHealth{ get; set; }
+    
+    public static ITabularOperator<KubeMonAgentEvents> KubeMonAgentEvents{ get; set; }
+    
+    public static ITabularOperator<KubeNodeInventory> KubeNodeInventory{ get; set; }
+    
+    public static ITabularOperator<KubePodInventory> KubePodInventory{ get; set; }
+    
+    public static ITabularOperator<KubePVInventory> KubePVInventory{ get; set; }
+    
+    public static ITabularOperator<KubeServices> KubeServices{ get; set; }
+    
+    public static ITabularOperator<Perf> Perf{ get; set; }
+    
+    public static ITabularOperator<Databases> Databases{ get; set; }
+    
+    public static ITabularOperator<DHAppReliability> DHAppReliability{ get; set; }
+    
+    public static ITabularOperator<DHDriverReliability> DHDriverReliability{ get; set; }
+    
+    public static ITabularOperator<DHLogonFailures> DHLogonFailures{ get; set; }
+    
+    public static ITabularOperator<DHLogonMetrics> DHLogonMetrics{ get; set; }
+    
+    public static ITabularOperator<DHOSCrashData> DHOSCrashData{ get; set; }
+    
+    public static ITabularOperator<DHOSReliability> DHOSReliability{ get; set; }
+    
+    public static ITabularOperator<DHWipAppLearning> DHWipAppLearning{ get; set; }
+    
+    public static ITabularOperator<MAApplication> MAApplication{ get; set; }
+    
+    public static ITabularOperator<MAApplicationHealth> MAApplicationHealth{ get; set; }
+    
+    public static ITabularOperator<MAApplicationHealthAlternativeVersions> MAApplicationHealthAlternativeVersions{ get; set; }
+    
+    public static ITabularOperator<MAApplicationHealthIssues> MAApplicationHealthIssues{ get; set; }
+    
+    public static ITabularOperator<MAApplicationInstance> MAApplicationInstance{ get; set; }
+    
+    public static ITabularOperator<MAApplicationInstanceReadiness> MAApplicationInstanceReadiness{ get; set; }
+    
+    public static ITabularOperator<MAApplicationReadiness> MAApplicationReadiness{ get; set; }
+    
+    public static ITabularOperator<MADeploymentPlan> MADeploymentPlan{ get; set; }
+    
+    public static ITabularOperator<MADevice> MADevice{ get; set; }
+    
+    public static ITabularOperator<MADeviceNotEnrolled> MADeviceNotEnrolled{ get; set; }
+    
+    public static ITabularOperator<MADeviceNRT> MADeviceNRT{ get; set; }
+    
+    public static ITabularOperator<MADeviceReadiness> MADeviceReadiness{ get; set; }
+    
+    public static ITabularOperator<MADriverInstanceReadiness> MADriverInstanceReadiness{ get; set; }
+    
+    public static ITabularOperator<MADriverReadiness> MADriverReadiness{ get; set; }
+    
+    public static ITabularOperator<MAProposedPilotDevices> MAProposedPilotDevices{ get; set; }
+    
+    public static ITabularOperator<MAWindowsBuildInfo> MAWindowsBuildInfo{ get; set; }
+    
+    public static ITabularOperator<MAWindowsCurrencyAssessment> MAWindowsCurrencyAssessment{ get; set; }
+    
+    public static ITabularOperator<MAWindowsCurrencyAssessmentDailyCounts> MAWindowsCurrencyAssessmentDailyCounts{ get; set; }
+    
+    public static ITabularOperator<MAWindowsDeploymentStatus> MAWindowsDeploymentStatus{ get; set; }
+    
+    public static ITabularOperator<MAWindowsDeploymentStatusNRT> MAWindowsDeploymentStatusNRT{ get; set; }
+    
+    public static ITabularOperator<UAApp> UAApp{ get; set; }
+    
+    public static ITabularOperator<UAComputer> UAComputer{ get; set; }
+    
+    public static ITabularOperator<UAComputerRank> UAComputerRank{ get; set; }
+    
+    public static ITabularOperator<UADriver> UADriver{ get; set; }
+    
+    public static ITabularOperator<UADriverProblemCodes> UADriverProblemCodes{ get; set; }
+    
+    public static ITabularOperator<UAFeedback> UAFeedback{ get; set; }
+    
+    public static ITabularOperator<UAIESiteDiscovery> UAIESiteDiscovery{ get; set; }
+    
+    public static ITabularOperator<UAOfficeAddIn> UAOfficeAddIn{ get; set; }
+    
+    public static ITabularOperator<UAProposedActionPlan> UAProposedActionPlan{ get; set; }
+    
+    public static ITabularOperator<UASysReqIssue> UASysReqIssue{ get; set; }
+    
+    public static ITabularOperator<UAUpgradedComputer> UAUpgradedComputer{ get; set; }
+    
+    public static ITabularOperator<WaaSDeploymentStatus> WaaSDeploymentStatus{ get; set; }
+    
+    public static ITabularOperator<WaaSInsiderStatus> WaaSInsiderStatus{ get; set; }
+    
+    public static ITabularOperator<WaaSUpdateStatus> WaaSUpdateStatus{ get; set; }
+    
+    public static ITabularOperator<WDAVStatus> WDAVStatus{ get; set; }
+    
+    public static ITabularOperator<WDAVThreat> WDAVThreat{ get; set; }
+    
+    public static ITabularOperator<WUDOAggregatedStatus> WUDOAggregatedStatus{ get; set; }
+    
+    public static ITabularOperator<WUDOStatus> WUDOStatus{ get; set; }
+    
+    public static ITabularOperator<AddonAzureBackupAlerts> AddonAzureBackupAlerts{ get; set; }
+    
+    public static ITabularOperator<AddonAzureBackupJobs> AddonAzureBackupJobs{ get; set; }
+    
+    public static ITabularOperator<AddonAzureBackupPolicy> AddonAzureBackupPolicy{ get; set; }
+    
+    public static ITabularOperator<AddonAzureBackupProtectedInstance> AddonAzureBackupProtectedInstance{ get; set; }
+    
+    public static ITabularOperator<AddonAzureBackupStorage> AddonAzureBackupStorage{ get; set; }
+    
+    public static ITabularOperator<ComputerGroup> ComputerGroup{ get; set; }
+    
+    public static ITabularOperator<ConfigurationChange> ConfigurationChange{ get; set; }
+    
+    public static ITabularOperator<ConfigurationData> ConfigurationData{ get; set; }
+    
+    public static ITabularOperator<CoreAzureBackup> CoreAzureBackup{ get; set; }
+    
+    public static ITabularOperator<Heartbeat> Heartbeat{ get; set; }
+    
+    public static ITabularOperator<IntuneAuditLogs> IntuneAuditLogs{ get; set; }
+    
+    public static ITabularOperator<IntuneDeviceComplianceOrg> IntuneDeviceComplianceOrg{ get; set; }
+    
+    public static ITabularOperator<IntuneDevices> IntuneDevices{ get; set; }
+    
+    public static ITabularOperator<IntuneOperationalLogs> IntuneOperationalLogs{ get; set; }
+    
+    public static ITabularOperator<Update> Update{ get; set; }
+    
+    public static ITabularOperator<UpdateRunProgress> UpdateRunProgress{ get; set; }
+    
+    public static ITabularOperator<Network> Network{ get; set; }
+    
+    public static ITabularOperator<AzureDiagnostics> AzureDiagnostics{ get; set; }
+    
+    public static ITabularOperator<DnsEvents> DnsEvents{ get; set; }
+    
+    public static ITabularOperator<DnsInventory> DnsInventory{ get; set; }
+    
+    public static ITabularOperator<NetworkMonitoring> NetworkMonitoring{ get; set; }
+    
+    public static ITabularOperator<NWConnectionMonitorPathResult> NWConnectionMonitorPathResult{ get; set; }
+    
+    public static ITabularOperator<NWConnectionMonitorTestResult> NWConnectionMonitorTestResult{ get; set; }
+    
+    public static ITabularOperator<Security> Security{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesAccountLogon> AADDomainServicesAccountLogon{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesAccountManagement> AADDomainServicesAccountManagement{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesDirectoryServiceAccess> AADDomainServicesDirectoryServiceAccess{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesLogonLogoff> AADDomainServicesLogonLogoff{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesPolicyChange> AADDomainServicesPolicyChange{ get; set; }
+    
+    public static ITabularOperator<AADDomainServicesPrivilegeUse> AADDomainServicesPrivilegeUse{ get; set; }
+    
+    public static ITabularOperator<AADManagedIdentitySignInLogs> AADManagedIdentitySignInLogs{ get; set; }
+    
+    public static ITabularOperator<AADNonInteractiveUserSignInLogs> AADNonInteractiveUserSignInLogs{ get; set; }
+    
+    public static ITabularOperator<AADProvisioningLogs> AADProvisioningLogs{ get; set; }
+    
+    public static ITabularOperator<AADRiskyUsers> AADRiskyUsers{ get; set; }
+    
+    public static ITabularOperator<AADServicePrincipalSignInLogs> AADServicePrincipalSignInLogs{ get; set; }
+    
+    public static ITabularOperator<AADUserRiskEvents> AADUserRiskEvents{ get; set; }
+    
+    public static ITabularOperator<ADFSSignInLogs> ADFSSignInLogs{ get; set; }
+    
+    public static ITabularOperator<Anomalies> Anomalies{ get; set; }
+    
+    public static ITabularOperator<AppServiceIPSecAuditLogs> AppServiceIPSecAuditLogs{ get; set; }
+    
+    public static ITabularOperator<AuditLogs> AuditLogs{ get; set; }
+    
+    public static ITabularOperator<AWSCloudTrail> AWSCloudTrail{ get; set; }
+    
+    public static ITabularOperator<AWSGuardDuty> AWSGuardDuty{ get; set; }
+    
+    public static ITabularOperator<AWSVPCFlow> AWSVPCFlow{ get; set; }
+    
+    public static ITabularOperator<AzureActivity> AzureActivity{ get; set; }
+    
+    public static ITabularOperator<AzureDiagnostics> AzureDiagnostics{ get; set; }
+    
+    public static ITabularOperator<BehaviorAnalytics> BehaviorAnalytics{ get; set; }
+    
+    public static ITabularOperator<CommonSecurityLog> CommonSecurityLog{ get; set; }
+    
+    public static ITabularOperator<DeviceFileEvents> DeviceFileEvents{ get; set; }
+    
+    public static ITabularOperator<DeviceNetworkEvents> DeviceNetworkEvents{ get; set; }
+    
+    public static ITabularOperator<DeviceNetworkInfo> DeviceNetworkInfo{ get; set; }
+    
+    public static ITabularOperator<DeviceProcessEvents> DeviceProcessEvents{ get; set; }
+    
+    public static ITabularOperator<DeviceRegistryEvents> DeviceRegistryEvents{ get; set; }
+    
+    public static ITabularOperator<DynamicEventCollection> DynamicEventCollection{ get; set; }
+    
+    public static ITabularOperator<EmailAttachmentInfo> EmailAttachmentInfo{ get; set; }
+    
+    public static ITabularOperator<EmailEvents> EmailEvents{ get; set; }
+    
+    public static ITabularOperator<EmailPostDeliveryEvents> EmailPostDeliveryEvents{ get; set; }
+    
+    public static ITabularOperator<EmailUrlInfo> EmailUrlInfo{ get; set; }
+    
+    public static ITabularOperator<HDInsightSecurityLogs> HDInsightSecurityLogs{ get; set; }
+    
+    public static ITabularOperator<HuntingBookmark> HuntingBookmark{ get; set; }
+    
+    public static ITabularOperator<LinuxAuditLog> LinuxAuditLog{ get; set; }
+    
+    public static ITabularOperator<McasShadowItReporting> McasShadowItReporting{ get; set; }
+    
+    public static ITabularOperator<NetworkSessions> NetworkSessions{ get; set; }
+    
+    public static ITabularOperator<OfficeActivity> OfficeActivity{ get; set; }
+    
+    public static ITabularOperator<ProtectionStatus> ProtectionStatus{ get; set; }
+    
+    public static ITabularOperator<SecurityAlert> SecurityAlert{ get; set; }
+    
+    public static ITabularOperator<SecurityBaseline> SecurityBaseline{ get; set; }
+    
+    public static ITabularOperator<SecurityBaselineSummary> SecurityBaselineSummary{ get; set; }
+    
+    public static ITabularOperator<SecurityDetection> SecurityDetection{ get; set; }
+    
+    public static ITabularOperator<SecurityEvent> SecurityEvent{ get; set; }
+    
+    public static ITabularOperator<SecurityIoTRawEvent> SecurityIoTRawEvent{ get; set; }
+    
+    public static ITabularOperator<SecurityRecommendation> SecurityRecommendation{ get; set; }
+    
+    public static ITabularOperator<SentinelHealth> SentinelHealth{ get; set; }
+    
+    public static ITabularOperator<SigninLogs> SigninLogs{ get; set; }
+    
+    public static ITabularOperator<Syslog> Syslog{ get; set; }
+    
+    public static ITabularOperator<ThreatIntelligenceIndicator> ThreatIntelligenceIndicator{ get; set; }
+    
+    public static ITabularOperator<Update> Update{ get; set; }
+    
+    public static ITabularOperator<UserAccessAnalytics> UserAccessAnalytics{ get; set; }
+    
+    public static ITabularOperator<UserPeerAnalytics> UserPeerAnalytics{ get; set; }
+    
+    public static ITabularOperator<Watchlist> Watchlist{ get; set; }
+    
+    public static ITabularOperator<WindowsEvent> WindowsEvent{ get; set; }
+    
+    public static ITabularOperator<WindowsFirewall> WindowsFirewall{ get; set; }
+    
+    public static ITabularOperator<WireData> WireData{ get; set; }
+    
+    public static ITabularOperator<AutoscaleEvaluationsLog> AutoscaleEvaluationsLog{ get; set; }
+    
+    public static ITabularOperator<AutoscaleScaleActionsLog> AutoscaleScaleActionsLog{ get; set; }
+    
+    public static ITabularOperator<ComputerGroup> ComputerGroup{ get; set; }
+    
+    public static ITabularOperator<ETWEvent> ETWEvent{ get; set; }
+    
+    public static ITabularOperator<Event> Event{ get; set; }
+    
+    public static ITabularOperator<Heartbeat> Heartbeat{ get; set; }
+    
+    public static ITabularOperator<InsightsMetrics> InsightsMetrics{ get; set; }
+    
+    public static ITabularOperator<Perf> Perf{ get; set; }
+    
+    public static ITabularOperator<Syslog> Syslog{ get; set; }
+    
+    public static ITabularOperator<UpdateSummary> UpdateSummary{ get; set; }
+    
+    public static ITabularOperator<VMBoundPort> VMBoundPort{ get; set; }
+    
+    public static ITabularOperator<VMComputer> VMComputer{ get; set; }
+    
+    public static ITabularOperator<VMConnection> VMConnection{ get; set; }
+    
+    public static ITabularOperator<VMProcess> VMProcess{ get; set; }
+    
+    public static ITabularOperator<W3CIISLog> W3CIISLog{ get; set; }
+    
+    public static ITabularOperator<WireData> WireData{ get; set; }
+    
+    public static ITabularOperator<WVDCheckpoints> WVDCheckpoints{ get; set; }
+    
+    public static ITabularOperator<WVDConnections> WVDConnections{ get; set; }
+    
+    public static ITabularOperator<WVDErrors> WVDErrors{ get; set; }
+    
+    public static ITabularOperator<WVDFeeds> WVDFeeds{ get; set; }
+    
+    public static ITabularOperator<WVDHostRegistrations> WVDHostRegistrations{ get; set; }
+    
+    public static ITabularOperator<WVDManagement> WVDManagement{ get; set; }
+    
+    public static ITabularOperator<Workloads> Workloads{ get; set; }
+    
+    public static ITabularOperator<ADAssessmentRecommendation> ADAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<ADReplicationResult> ADReplicationResult{ get; set; }
+    
+    public static ITabularOperator<ADSecurityAssessmentRecommendation> ADSecurityAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<AzureAssessmentRecommendation> AzureAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<DeviceAppCrash> DeviceAppCrash{ get; set; }
+    
+    public static ITabularOperator<DeviceAppLaunch> DeviceAppLaunch{ get; set; }
+    
+    public static ITabularOperator<DeviceCalendar> DeviceCalendar{ get; set; }
+    
+    public static ITabularOperator<DeviceCleanup> DeviceCleanup{ get; set; }
+    
+    public static ITabularOperator<DeviceConnectSession> DeviceConnectSession{ get; set; }
+    
+    public static ITabularOperator<DeviceEtw> DeviceEtw{ get; set; }
+    
+    public static ITabularOperator<DeviceHardwareHealth> DeviceHardwareHealth{ get; set; }
+    
+    public static ITabularOperator<DeviceHealth> DeviceHealth{ get; set; }
+    
+    public static ITabularOperator<DeviceHeartbeat> DeviceHeartbeat{ get; set; }
+    
+    public static ITabularOperator<DeviceSkypeHeartbeat> DeviceSkypeHeartbeat{ get; set; }
+    
+    public static ITabularOperator<DeviceSkypeSignIn> DeviceSkypeSignIn{ get; set; }
+    
+    public static ITabularOperator<ExchangeAssessmentRecommendation> ExchangeAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<ExchangeOnlineAssessmentRecommendation> ExchangeOnlineAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<MicrosoftDynamicsTelemetryPerformanceLogs> MicrosoftDynamicsTelemetryPerformanceLogs{ get; set; }
+    
+    public static ITabularOperator<MicrosoftDynamicsTelemetrySystemMetricsLogs> MicrosoftDynamicsTelemetrySystemMetricsLogs{ get; set; }
+    
+    public static ITabularOperator<SCCMAssessmentRecommendation> SCCMAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<SCOMAssessmentRecommendation> SCOMAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<SfBAssessmentRecommendation> SfBAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<SfBOnlineAssessmentRecommendation> SfBOnlineAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<SharePointOnlineAssessmentRecommendation> SharePointOnlineAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<SPAssessmentRecommendation> SPAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<SQLAssessmentRecommendation> SQLAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<SqlVulnerabilityAssessmentResult> SqlVulnerabilityAssessmentResult{ get; set; }
+    
+    public static ITabularOperator<WindowsClientAssessmentRecommendation> WindowsClientAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<WindowsServerAssessmentRecommendation> WindowsServerAssessmentRecommendation{ get; set; }
+    
+    public static ITabularOperator<WorkloadDiagnosticLogs> WorkloadDiagnosticLogs{ get; set; }
+    
+    public static ITabularOperator<WorkloadMonitoringPerf> WorkloadMonitoringPerf{ get; set; }
+    

@@ -24,49 +24,53 @@ namespace FluentKusto.AzMonTablesCSharpGenerator
 {
     class Program
     {
+        private const string CSharpKustoClassFile = "AzMonTablesCSharpGenerator\\CSharpKustoClassFile.txt";
+        private const string AzMonitorRefTables = "AzMonTablesCSharpGenerator\\AzMonitorRefTables.txt";
         private const string TableJsonFileDir = "AzMonTablesCSharpGenerator\\TableJsonFiles";
         private static bool WriteSchemaToFiles = false;
-        private static string TableClassTemplateFilePath = "AzMonTablesCSharpGenerator\\TableClassTemplate.cshtml";
+        private static string CSHtmlTableClassTemplateFilePath = "AzMonTablesCSharpGenerator\\TableClassTemplate.cshtml";
+        private static string CSHtmlKustoPropertyTemplate = "AzMonTablesCSharpGenerator\\KustoPropertyTemplate.cshtml";
 
         private const string AzMonTableRefYaml =
             "https://raw.githubusercontent.com/MicrosoftDocs/azure-reference-other/master/azure-monitor-ref/TOC.yml";
 
         private const string GeneratedClassFileDestDir = "src\\tables";
 
-        // private const string WorkspaceId = "4cecddb2-c069-488a-b3a1-d9bf129168bf";
-
-        // private const string WorkspaceUrl =
-        //     "https://api.loganalytics.io/v1/workspaces/4cecddb2-c069-488a-b3a1-d9bf129168bf/metadata";
-
-        // private const string AccessTokenScope = "https://api.loganalytics.io/.default";
-
-        // private const string TenantId = "72f988bf-86f1-41af-91ab-2d7cd011db47";
-
         static void Main(string[] args)
         {
             WriteSchemaToFiles = Convert.ToBoolean(Environment.GetEnvironmentVariable("WriteSchemaToFiles"));
-            // var client = new LogsQueryClient(new DefaultAzureCredential());
-            // Response<LogsQueryResult> response =
-            //     client.QueryAsync( WorkspaceId, "AzureActivity | top 10 by TimeGenerated",
-            // new DateTimeRange(TimeSpan.FromDays(1))).GetAwaiter().GetResult();
 
-            //var tables = GetTables();
+            var tables = GetTables();
 
-            //CreateJsonFileWithTablesWithColumns(tables);
+            //TableContentAsJsonFiles(tables);
 
-            GenerateTableClassFiles();
+            //GenerateTableClassFiles();
 
-            GenerateKustoPropertiesInClassFile();
+            GenerateKustoPropertiesInClassFile(tables);
         }
 
-        private static void GenerateKustoPropertiesInClassFile()
+        private static void GenerateKustoPropertiesInClassFile(IEnumerable<string> tables)
         {
+            string template = File.ReadAllText(CSHtmlKustoPropertyTemplate);
 
+            var config = new TemplateServiceConfiguration();
+            config.EncodedStringFactory = new RawStringFactory(); // Raw string encoding instead of html
+
+            var svc = RazorEngineService.Create(config);
+            Engine.Razor = svc;
+
+            string kustoProps
+                    = Engine.Razor.RunCompile(template, "multifile-main", typeof(string[]), tables);
+
+            using(var writer  = new StreamWriter(CSharpKustoClassFile))
+            {
+                writer.WriteLine(kustoProps);
+            }
         }
 
         private static void GenerateTableClassFiles()
         {
-            string template = File.ReadAllText(TableClassTemplateFilePath);
+            string template = File.ReadAllText(CSHtmlTableClassTemplateFilePath);
 
             var config = new TemplateServiceConfiguration();
             config.EncodedStringFactory = new RawStringFactory(); // Raw string encoding instead of html
@@ -80,12 +84,12 @@ namespace FluentKusto.AzMonTablesCSharpGenerator
             {
                 var tableJson = File.ReadAllText(f);
 
-                var tableObj = JsonConvert.DeserializeObject<TableWithColumns>(tableJson);
+                var tableObj = JsonConvert.DeserializeObject<Table>(tableJson);
 
                 string tableClass
-                    = Engine.Razor.RunCompile(template, "multifile-main", typeof(TableWithColumns), tableObj);
+                    = Engine.Razor.RunCompile(template, "multifile-main", typeof(Table), tableObj);
 
-                using(var writer  = new StreamWriter(Path.Combine(GeneratedClassFileDestDir, tableObj.Table + ".cs")))
+                using(var writer  = new StreamWriter(Path.Combine(GeneratedClassFileDestDir, tableObj.Name + ".cs")))
                 {
                     writer.WriteLine(tableClass);
                 }
@@ -112,7 +116,7 @@ namespace FluentKusto.AzMonTablesCSharpGenerator
             return result;
         }
 
-        private static void CreateJsonFileWithTablesWithColumns(IEnumerable<string> tables)
+        private static void TableContentAsJsonFiles(IEnumerable<string> tables)
         {
             //var tableWithCols = new List<TableWithColumns>();
 
@@ -138,11 +142,11 @@ namespace FluentKusto.AzMonTablesCSharpGenerator
                         indexOfEndOfJson = indexOfEndOfJson + 1;
                         json = json.Remove(indexOfEndOfJson, (json.Length - indexOfEndOfJson));
 
-                        var tableCol = JsonConvert.DeserializeObject<List<ColumnSchema>>(json);
+                        var tableCol = JsonConvert.DeserializeObject<List<Column>>(json);
 
-                        var tableWithCol = new TableWithColumns()
+                        var tableWithCol = new Table()
                         {
-                            Table = t,
+                            Name = t,
                             Columns = tableCol
                         };
 
@@ -168,32 +172,38 @@ namespace FluentKusto.AzMonTablesCSharpGenerator
 
         private static IEnumerable<string> GetTables()
         {
+           string refTables = File.ReadAllText(AzMonitorRefTables);
+
+           string[] tables = refTables.Split(Environment.NewLine);
+
+           return tables;
+
            //TODO - download ref yaml
            //https://raw.githubusercontent.com/MicrosoftDocs/azure-reference-other/master/azure-monitor-ref/TOC.yml
 
-            using(var webclient = new WebClient())
-            {
-                byte[] tablesRaw = webclient.DownloadData(AzMonTableRefYaml);
+            // using(var webclient = new WebClient())
+            // {
+            //     byte[] tablesRaw = webclient.DownloadData(AzMonTableRefYaml);
 
-                string yaml = System.Text.Encoding.UTF8.GetString(tablesRaw);
+            //     string yaml = System.Text.Encoding.UTF8.GetString(tablesRaw);
 
-                string[] splitNewLine = yaml.Split(Environment.NewLine);
-                var newList = splitNewLine.ToList();
-                newList.RemoveRange(0, 12);
+            //     string[] splitNewLine = yaml.Split(Environment.NewLine);
+            //     var newList = splitNewLine.ToList();
+            //     newList.RemoveRange(0, 12);
 
-                //get names only, ignore "href"
-                var namesOnly = newList.Where(x => x.Contains("name"));
+            //     //get names only, ignore "href"
+            //     var namesOnly = newList.Where(x => x.Contains("name"));
 
-                var tableNames = new List<string>();
+            //     var tableNames = new List<string>();
 
-                foreach(string n in namesOnly)
-                {
-                    string name = n.Split("- name: ")[1];
-                    tableNames.Add(name);
-                }
+            //     foreach(string n in namesOnly)
+            //     {
+            //         string name = n.Split("- name: ")[1];
+            //         tableNames.Add(name);
+            //     }
 
-                return tableNames;
-            }
+            //     return tableNames;
+            // }
         }
     }
 }

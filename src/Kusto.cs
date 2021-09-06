@@ -7,14 +7,14 @@ namespace FluentKusto
 {
     public class Kusto
     {
-        // public void Expr(Expression<Action<dynamic> expr) {
-        //     dynamic A = new object();
-        //     A.B = "valid";
-        // }
+        public static ITabularOperator<AACAudit> AACAudit { get; set; }
+    }
 
-        // public void Test() {
-        //     Expr(x => x.L = 0);
+    public class Test
+    {
+        public void Testing()
+        {
 
-        // }
+        }
     }
 }

@@ -1,4 +1,4 @@
-public class ColumnSchema
+public class Column
 {
     public string Description { get; set; } = "";
     public string Name { get; set; }
