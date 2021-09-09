@@ -7,14 +7,13 @@ namespace FluentKusto
 {
     public class Kusto
     {
-        public static ITabularOperator<AACAudit> AACAudit { get; set; }
-    }
-
-    public class Test
-    {
-        public void Testing()
+        /// <summary>Create a new instance of Kql client</summary>
+        ///
+        public static Kql New()
         {
-
+            return new Kql();
         }
     }
+
+
 }

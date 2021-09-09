@@ -1,0 +1,27 @@
+@using FluentKusto.AzMonTablesCSharpGenerator
+
+using System;
+using System.Linq.Expressions;
+
+namespace FluentKusto
+{
+    public class @Model.Name
+    {
+        @foreach (var column in @Model.Columns)
+        {
+            @if(@column.Type == "datetime")
+            {
+            <text>
+            /// @column.Description
+            public DateTime @column.Name {get; set;}
+            </text>
+            } else {
+            <text>
+            /// @column.Description
+            public @column.Type @column.Name {get; set;}
+            </text>
+            }
+
+        }
+    }
+}
