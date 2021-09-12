@@ -294,7 +294,6 @@ LinuxAuditLog
 McasShadowItReporting
 NetworkSessions
 OfficeActivity
-ProtectionStatus
 SecurityAlert
 SecurityBaseline
 SecurityBaselineSummary

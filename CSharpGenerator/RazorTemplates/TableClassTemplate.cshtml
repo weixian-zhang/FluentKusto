@@ -1,11 +1,11 @@
-@using FluentKusto.AzMonTablesCSharpGenerator
+@using FluentKusto.CSharpGenerator
 
 using System;
 using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public class @Model.Name
+    public class @Model.Name : TableBase<@Model.Name>
     {
         @foreach (var column in @Model.Columns)
         {
@@ -15,13 +15,22 @@ namespace FluentKusto
             /// @column.Description
             public DateTime @column.Name {get; set;}
             </text>
-            } else {
+            continue;
+            }
+
+            @if(@column.Type == "real")
+            {
+            <text>
+            /// @column.Description
+            public float @column.Name {get; set;}
+            </text>
+            continue;
+            }
+
             <text>
             /// @column.Description
             public @column.Type @column.Name {get; set;}
             </text>
-            }
-
         }
     }
 }

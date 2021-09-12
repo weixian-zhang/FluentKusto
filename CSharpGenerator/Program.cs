@@ -3,33 +3,22 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using Azure;
-using Azure.Core;
-using Azure.Identity;
-using Azure.Monitor.Query;
-using Azure.Monitor.Query.Models;
 using Newtonsoft.Json;
 using RazorEngine;
 using RazorEngine.Configuration;
 using RazorEngine.Templating;
 using RazorEngine.Text;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
-namespace FluentKusto.AzMonTablesCSharpGenerator
+namespace FluentKusto.CSharpGenerator
 {
     class Program
     {
-        private const string CSharpKustoClassFile = "AzMonTablesCSharpGenerator\\CSharpKustoClassFile.txt";
-        private const string AzMonitorRefTables = "AzMonTablesCSharpGenerator\\AzMonitorRefTables.txt";
-        private const string TableJsonFileDir = "AzMonTablesCSharpGenerator\\TableJsonFiles";
+        private const string CSharpKustoClassFile = "CSharpGenerator\\CSharpKustoClassFile.txt";
+        private const string AzMonitorRefTables = "CSharpGenerator\\AzMonitorRefTables.txt";
+        private const string TableJsonFileDir = "CSharpGenerator\\TableJsonFiles";
         private static bool WriteSchemaToFiles = false;
-        private static string CSHtmlTableClassTemplateFilePath = "AzMonTablesCSharpGenerator\\RazorTemplates\\TableClassTemplate.cshtml";
-        private static string CSHtmlKustoPropertyTemplate = "AzMonTablesCSharpGenerator\\RazorTemplates\\KustoPropertyTemplate.cshtml";
+        private static string CSHtmlTableClassTemplateFilePath = "CSharpGenerator\\RazorTemplates\\TableClassTemplate.cshtml";
+        private static string CSHtmlKustoPropertyTemplate = "CSharpGenerator\\RazorTemplates\\KustoPropertyTemplate.cshtml";
 
         private const string AzMonTableRefYaml =
             "https://raw.githubusercontent.com/MicrosoftDocs/azure-reference-other/master/azure-monitor-ref/TOC.yml";
@@ -44,12 +33,12 @@ namespace FluentKusto.AzMonTablesCSharpGenerator
 
             //TableContentAsJsonFiles(tables);
 
-            //GenerateTableClassFiles();
+            GenerateTableClassFiles();
 
-            GenerateKustoPropertiesInClassFile(tables);
+            //GenerateKustoPropertiesInClassFile();
         }
 
-        private static void GenerateKustoPropertiesInClassFile(IEnumerable<string> tables)
+        private static void GenerateKustoPropertiesInClassFile()//IEnumerable<string> tables)
         {
             string template = File.ReadAllText(CSHtmlKustoPropertyTemplate);
 
@@ -59,8 +48,12 @@ namespace FluentKusto.AzMonTablesCSharpGenerator
             var svc = RazorEngineService.Create(config);
             Engine.Razor = svc;
 
+            var files = Directory.GetFiles(TableJsonFileDir);
+            var tables = from file in files
+                        select Path.GetFileNameWithoutExtension(file);
+
             string kustoProps
-                    = Engine.Razor.RunCompile(template, "multifile-main", typeof(string[]), tables);
+                    = Engine.Razor.RunCompile(template, "multifile-main", typeof(string[]), tables.ToArray());
 
             using(var writer  = new StreamWriter(CSharpKustoClassFile))
             {
@@ -82,17 +75,25 @@ namespace FluentKusto.AzMonTablesCSharpGenerator
 
             foreach(var f in files)
             {
-                var tableJson = File.ReadAllText(f);
-
-                var tableObj = JsonConvert.DeserializeObject<Table>(tableJson);
-
-                string tableClass
-                    = Engine.Razor.RunCompile(template, "multifile-main", typeof(Table), tableObj);
-
-                using(var writer  = new StreamWriter(Path.Combine(GeneratedClassFileDestDir, tableObj.Name + ".cs")))
+                try
                 {
-                    writer.WriteLine(tableClass);
+                    var tableJson = File.ReadAllText(f);
+
+                    var tableObj = JsonConvert.DeserializeObject<Table>(tableJson);
+
+                    string tableClass
+                        = Engine.Razor.RunCompile(template, "multifile-main", typeof(Table), tableObj);
+
+                    using(var writer  = new StreamWriter(Path.Combine(GeneratedClassFileDestDir, tableObj.Name + ".cs")))
+                    {
+                        writer.WriteLine(tableClass);
+                    }
                 }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
+
             }
         }
 

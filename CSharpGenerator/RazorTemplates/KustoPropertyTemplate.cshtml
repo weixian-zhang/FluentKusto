@@ -1,8 +1,8 @@
-@using FluentKusto.AzMonTablesCSharpGenerator
+@using FluentKusto.CSharpGenerator
 
 @foreach(string table in @Model)
 {
     <text>
-    public ITabularOperator<@table> @table{ get; set; } = new @table();
+    public ITabularOperator<@table> @table{ get; set; } = new @{@table}();
     </text>
 }

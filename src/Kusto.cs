@@ -7,7 +7,7 @@ namespace FluentKusto
 {
     public class Kusto
     {
-        /// <summary>Create a new instance of Kql client</summary>
+        /// <summary>Create a new instance of Kql client using Azure.Identity.DefaultAzureCredential summary>
         ///
         public static Kql New()
         {

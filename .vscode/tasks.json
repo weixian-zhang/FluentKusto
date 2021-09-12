@@ -22,7 +22,18 @@
             ],
             "type": "shell",
             "options": {
-                "cwd": "${workspaceFolder}/AzMonTablesCSharpGenerator"
+                "cwd": "${workspaceFolder}/CSharpGenerator"
+            }
+        },
+        {
+            "label": "build TestClient",
+            "command": "dotnet",
+            "args": [
+                "build"
+            ],
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/Testclient"
             }
         }
     ]
