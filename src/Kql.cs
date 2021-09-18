@@ -5,10 +5,29 @@ namespace FluentKusto
 {
     public class Kql
     {
+        #region datetime funcs
+
         public static DateTime ago(string timespan)
         {
            return DateTime.Now;
         }
+
+        #endregion
+
+        #region numeric funcs
+
+        public static bool In(string[] elements)
+        {
+           return true;
+        }
+
+        public static bool NotIn(string[] elements)
+        {
+           return true;
+        }
+
+        #endregion
+
 
 
         #region Tables

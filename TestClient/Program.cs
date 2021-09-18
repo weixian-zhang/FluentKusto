@@ -10,12 +10,12 @@ namespace FluentKusto.TestClient
         {
             var kql = Kusto.New();
 
-            kql.AACAudit
-                .Where(x =>
-                    x._SubscriptionId.equalsnoncase("DasdasdsaDASDASdasdas") &&
-                    x.TimeGenerated > Kql.ago("3h"))
-                .Project(x => x.RequestId + x.CallerIPAddress + x.Category);
-                //.Where(x => x.TimeGenerated > )
+            //kql.AACAudit.Where(x => x._SubscriptionId.equal("wdwa"));
+
+            kql.Update.Where(x =>
+                x._SubscriptionId.equalnoncase("DasdasdsaDASDASdasdas") &&
+                x.TimeGenerated > Kql.ago("3h") || x.ApprovalSource.equal("AAB")
+                && x.CVENumbers.notequal("B"));
         }
     }
 }

@@ -13,6 +13,8 @@ namespace FluentKusto
         {
             return new Kql();
         }
+
+
     }
 
 

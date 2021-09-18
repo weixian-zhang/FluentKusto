@@ -46,16 +46,14 @@ namespace FluentKusto
         {
             Type thisTableType = this.GetType();
 
-            Type genericTableType = thisTableType.GetGenericTypeDefinition();
-
-            return genericTableType.Name;
+            return thisTableType.Name;
         }
 
         #endregion
 
         public ITabularOperator<T> Where(Expression<Func<T,object>> expression)
         {
-            _queryParser.ParseWhere(new OperatorExpression<T>("Where", expression));
+            _queryParser.ParseWhere(expression.Body);//new OperatorExpression<T>("Where", expression.Body));
 
             return this;
         }
