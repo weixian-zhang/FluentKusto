@@ -4,6 +4,6 @@ namespace FluentKusto
     {
         public QueryResult Run();
 
-        public string GetQuery();
+        public string QueryAsString();
     }
 }

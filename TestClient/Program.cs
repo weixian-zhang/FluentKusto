@@ -12,7 +12,9 @@ namespace FluentKusto.TestClient
 
             //kql.AACAudit.Where(x => x._SubscriptionId.equal("wdwa"));
 
-            kql.AACAudit.Where(x => x._SubscriptionId.equal("231312-2312-13123") || x.EventCategory.equal("Event"));
+            kql.AACAudit
+            .Where(x => x._SubscriptionId.equal("231312-2312-13123") || x.EventCategory.equal("Event"))
+            .Run();
 
             // kql.Update.Where(x =>
             //     x._SubscriptionId.equalnoncase("DasdasdsaDASDASdasdas") &&

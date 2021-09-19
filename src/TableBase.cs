@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public abstract class TableBase<T> : ITabularOperator<T>, IKqlExecutor
+    public abstract class TableBase<T> : ITabularOperator<T>, IQueryAsString
     {
         private QueryBuilder _queryBuilder;
 
@@ -25,23 +25,6 @@ namespace FluentKusto
 
         #region Non Operator methods
 
-        public QueryResult Run()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string GetQuery()
-        {
-            return _queryBuilder.ToString();
-        }
-
-        public void InitQueryBuilderWithTable()
-        {
-            string table = CurrentTableName();
-
-            _queryBuilder.Append($"{table} |");
-        }
-
         private string CurrentTableName()
         {
             Type thisTableType = this.GetType();
@@ -50,6 +33,8 @@ namespace FluentKusto
         }
 
         #endregion
+
+        #region ITabularOperator
 
         public ITabularOperator<T> Where(Expression<Func<T,object>> expression)
         {
@@ -61,6 +46,30 @@ namespace FluentKusto
         public ITabularOperator<T> Project(Expression<Func<T, object>> opexpr)
         {
            return this;
+        }
+
+        public IQueryAsString Run()
+        {
+            //TODO:
+            // - call Azure Monitor Query library for DefaultAuth
+            // - or call Log Analytics via Http to support Workspace key, assuming Az Monitor Query
+            //does not support Woekspace key
+            throw new NotImplementedException();
+        }
+
+        public string GetString()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion ITabularOperator
+
+
+        public void InitQueryBuilderWithTable()
+        {
+            string table = CurrentTableName();
+
+            _queryBuilder.Append($"{table}");
         }
     }
 }

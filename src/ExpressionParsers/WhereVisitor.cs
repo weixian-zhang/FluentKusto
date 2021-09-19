@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public class WhereVisitor<T> : ExpressionVisitor //, IExpressionVisitorQuery<T>
+    public class WhereVisitor<T> : ExpressionVisitor
     {
 
         private QueryBuilder _queryBuilder;
@@ -34,6 +34,7 @@ namespace FluentKusto
             return "";
         }
 
+
         protected override Expression VisitBinary(BinaryExpression node) {
 
             if(KustoHelper.IsAndOr(node))
@@ -54,5 +55,7 @@ namespace FluentKusto
 
             return node;
         }
+
+
     }
 }

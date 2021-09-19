@@ -28,8 +28,6 @@ namespace FluentKusto
 
         #endregion
 
-
-
         #region Tables
 
         public ITabularOperator<AACAudit> AACAudit{ get; set; } = new AACAudit();

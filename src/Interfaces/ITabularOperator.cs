@@ -8,5 +8,7 @@ namespace FluentKusto
         public ITabularOperator<T> Where(Expression<Func<T,object>> where);
 
         public ITabularOperator<T> Project(Expression<Func<T,object>> project);
+
+        public IQueryAsString Run();
     }
 }
