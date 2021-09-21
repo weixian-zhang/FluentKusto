@@ -2,17 +2,17 @@ using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public class ExpressionParser<T>
+    public class QueryParser
     {
         private QueryBuilder _queryBuilder;
 
-        private WhereVisitor<T> _WhereVisitor;
+        private WhereVisitor _WhereVisitor;
 
-        public ExpressionParser( QueryBuilder queryBuilder)
+        public QueryParser( QueryBuilder queryBuilder)
         {
              _queryBuilder = queryBuilder;
 
-            _WhereVisitor = new WhereVisitor<T>();
+            _WhereVisitor = new WhereVisitor();
         }
 
         public void ParseWhere(Expression expression)

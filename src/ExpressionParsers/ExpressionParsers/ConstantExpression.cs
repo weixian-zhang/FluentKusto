@@ -2,11 +2,11 @@ using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public class MemberExpressionParser : IExpressionParser
+    public class ConstantExpressionParser : IExpressionParser
     {
         public string Parse(Expression node)
         {
-             var member = (MemberExpression)node;
+             var constant = (ConstantExpression)node;
 
             return "";
         }

@@ -2,67 +2,65 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text;
 
 namespace FluentKusto
 {
-    public class ExpressionElement
+    public class WhereVisitor : ExpressionVisitor, IOperatorExpressionVisitor
     {
-        public ExpressionElement(ExpressionType conditionType)
-        {
-            ConditionType = conditionType;
-        }
-
-        public ExpressionElement(Expression node)
-        {
-            ConditionType = ExpressionType.Lambda;
-            Node = node;
-        }
-
-        public ExpressionType ConditionType { get; set; } = ExpressionType.Lambda;
-        public Expression Node { get; set; }
-    }
-
-    public class WhereVisitor<T> : ExpressionVisitor
-    {
-        private IExpressionParser _MethodCallParser;
-         private IExpressionParser _MemberVisitor;
-
-        List<ExpressionElement> _dissectedElements = new List<ExpressionElement>();
-
-
-        //https://stackoverflow.com/questions/15709044/how-to-determine-the-depth-of-a-c-sharp-expression-tree-iterativly
+        List<ExpressionElement> _FlattenedElements;
 
         public WhereVisitor()
         {
-            _MethodCallParser =  new MethodCallExpressionParser();
-            _MemberVisitor = new MemberExpressionParser();
+            _FlattenedElements = new List<ExpressionElement>();
         }
 
         public string ParseQuery(Expression node)
         {
-            if(node.NodeType == ExpressionType.Convert)
-                node = ((UnaryExpression)node).Operand;
+            FlattenExpression(node);
 
-           if(KustoHelper.IsAndOr(node))
-           {
-              var currentCondition = node.NodeType;
-
-               var binary = (BinaryExpression)node;
-
-               Visit(binary.Left);
-
-               AddExpressionElement(currentCondition);
-
-               Visit(binary.Right);
-           }
-           //not and/or, will be member or methodcall
-           else
-                AddExpressionElement(node);
+            string where = ParseQueryInternal();
 
             return "";
         }
 
+        private string ParseQueryInternal()
+        {
+            var qb = new StringBuilder();
 
+            foreach(var ele in _FlattenedElements)
+            {
+                //"normal" conditional expression
+                if(ele.ConditionType == ExpressionType.Lambda)
+                {
+                    string query = ExpressionParser.Parse(ele.Node);
+                }
+            }
+
+            return qb.ToString();
+        }
+
+        private void FlattenExpression(Expression node)
+        {
+            if(node.NodeType == ExpressionType.Convert)
+                node = ((UnaryExpression)node).Operand;
+
+            if(KustoHelper.IsAndOr(node))
+            {
+                var currentCondition = node.NodeType;
+
+                var binary = (BinaryExpression)node;
+
+                Visit(binary.Left);
+
+                AddExpressionElement(currentCondition);
+
+                Visit(binary.Right);
+            }
+            //not and/or, will be member or methodcall
+            else
+                    AddExpressionElement(node);
+        }
 
         private Expression parentBinary = null;
         protected override Expression VisitBinary(BinaryExpression node) {
@@ -122,43 +120,13 @@ namespace FluentKusto
 
         private void AddExpressionElement(Expression node)
         {
-            if(!_dissectedElements.Exists(x => x.Node == node))
-                _dissectedElements.Add(new ExpressionElement(node));
+            if(!_FlattenedElements.Exists(x => x.Node == node))
+                _FlattenedElements.Add(new ExpressionElement(node));
         }
 
         private void AddExpressionElement(ExpressionType cType)
         {
-           _dissectedElements.Add(new ExpressionElement(cType));
-        }
-
-
-
-        private string ParseQueryInternal(List<ExpressionElement> nodes)
-        {
-            string wherekql = "";
-
-            foreach(var node in nodes)
-            {
-                //if(KustoHelper.IsMethodCall(node))
-            }
-
-            return "";
-        }
-
-        private bool IsNodeStringAndAlso(string node)
-        {
-            if(node == ExpressionType.AndAlso.ToString())
-                return true;
-            else
-                return false;
-        }
-
-        private bool IsNodeStringOrElse(string node)
-        {
-            if(node == ExpressionType.OrElse.ToString())
-                return true;
-            else
-                return false;
+           _FlattenedElements.Add(new ExpressionElement(cType));
         }
     }
 }

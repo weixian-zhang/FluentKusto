@@ -8,7 +8,7 @@ namespace FluentKusto
     {
         private QueryBuilder _queryBuilder;
 
-        private ExpressionParser<T> _queryParser;
+        private QueryParser _queryParser;
 
         private List<OperatorExpression<T>> _opsExpression;
 
@@ -20,7 +20,7 @@ namespace FluentKusto
 
             _opsExpression = new List<FluentKusto.OperatorExpression<T>>();
 
-            _queryParser = new ExpressionParser<T>(_queryBuilder);
+            _queryParser = new QueryParser(_queryBuilder);
         }
 
         #region Non Operator methods
@@ -38,7 +38,7 @@ namespace FluentKusto
 
         public ITabularOperator<T> Where(Expression<Func<T,object>> expression)
         {
-            _queryParser.ParseWhere(expression.Body);//new OperatorExpression<T>("Where", expression.Body));
+            _queryParser.ParseWhere(expression.Body);
 
             return this;
         }
