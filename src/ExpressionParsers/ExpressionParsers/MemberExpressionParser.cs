@@ -2,9 +2,9 @@ using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public class MemberAccessVisitor : IQueryParser
+    public class MemberExpressionParser : IExpressionParser
     {
-        public string Visit(Expression node)
+        public string Parse(Expression node)
         {
             var member = (MemberExpression)node;
 
