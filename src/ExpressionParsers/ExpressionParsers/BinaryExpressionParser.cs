@@ -8,7 +8,16 @@ namespace FluentKusto
         {
             var binary = (BinaryExpression)node;
 
-            return "";
+            string left = ExpressionParser.Parse(binary.Left);
+
+            string operand = OperandMappings.GetOperand(node.NodeType);
+
+            string right = ExpressionParser.Parse(binary.Right);
+
+            return (new QueryBuilder())
+                .Append(left)
+                .AppendWithSpace(operand)
+                .AppendWithSpace(right).Query();
         }
     }
 }

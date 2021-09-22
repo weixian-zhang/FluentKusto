@@ -14,12 +14,18 @@ namespace FluentKusto
 
             _parsers.Add("MethodCallExpression", new MethodCallExpressionParser());
 
-             _parsers.Add("MemberExpression", new MemberExpressionParser());
+            _parsers.Add("MethodBinaryExpression", new BinaryExpressionParser());
+
+            _parsers.Add("PropertyExpression", new MemberExpressionParser());
+
+            _parsers.Add("ConstantExpression", new ConstantExpressionParser());
         }
 
         public static string Parse(Expression node)
         {
             var exprTypeName = node.GetType().Name;
+
+            //TODO: fix method name inconsistency "MethodCallExpression1"
 
             var parser = _parsers[exprTypeName];
 

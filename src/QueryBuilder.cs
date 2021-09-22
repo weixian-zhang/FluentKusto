@@ -12,17 +12,45 @@ namespace FluentKusto
             _queryBuilder = new StringBuilder();
         }
 
-        public void Append(string query)
+        // public void AppendWithNewLine(string query)
+        // {
+        //     if(_queryBuilder.Length == 0)
+        //         _queryBuilder.Append(query);
+
+        //     _queryBuilder.Append(Environment.NewLine);
+
+        //     _queryBuilder.Append(query);
+        // }
+
+        public QueryBuilder Append(string query)
+        {
+             _queryBuilder.Append(query);
+
+             return this;
+        }
+
+        public QueryBuilder AppendWithSpace(string query)
         {
             if(_queryBuilder.Length == 0)
                 _queryBuilder.Append(query);
 
-            _queryBuilder.Append(Environment.NewLine);
+            _queryBuilder.Append(" ");
 
             _queryBuilder.Append(query);
+
+            return this;
         }
 
-        public string GetQuery()
+        public QueryBuilder AppendPipeNewLine()
+        {
+            _queryBuilder.Append(Environment.NewLine);
+
+            _queryBuilder.Append("|");
+
+            return this;
+        }
+
+        public string Query()
         {
             return _queryBuilder.ToString();
         }

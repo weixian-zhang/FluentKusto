@@ -6,9 +6,15 @@ namespace FluentKusto
     {
         public string Parse(Expression node)
         {
-             var member = (MethodCallExpression)node;
+            var method = (MethodCallExpression)node;
 
-            return "";
+            string methodName = method.Method.Name;
+
+            IFuncParser parser =  FunctionMappings.GetScalarFunctionParser(methodName);
+
+            string query = parser.Parse(node);
+
+            return query;
         }
     }
 }

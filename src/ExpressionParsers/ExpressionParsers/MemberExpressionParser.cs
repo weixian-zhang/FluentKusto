@@ -6,9 +6,9 @@ namespace FluentKusto
     {
         public string Parse(Expression node)
         {
-             var member = (MemberExpression)node;
+            var member = (MemberExpression)node;
 
-            return "";
+            return member.Member.Name;
         }
     }
 }
