@@ -10,7 +10,7 @@ namespace FluentKusto
 
             string left = ExpressionParser.Parse(binary.Left);
 
-            string operand = OperandMappings.GetOperand(node.NodeType);
+            string operand = OperandMaps.ResolveNumericOperand(node.NodeType);
 
             string right = ExpressionParser.Parse(binary.Right);
 

@@ -16,7 +16,7 @@ namespace FluentKusto
             if(string.IsNullOrEmpty(timespan))
                 throw new Exception("Missing argument in ago(), e.g 1d, 1m, 4h");
 
-            return $"ago{timespan}";
+            return $"ago(\"{timespan}\")";
         }
     }
 }

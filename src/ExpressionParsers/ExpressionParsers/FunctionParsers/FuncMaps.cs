@@ -5,13 +5,13 @@ using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public static class FunctionMappings
+    public static class FuncMaps
     {
-        private static Dictionary<string, string> _StringFunctions = new Dictionary<string, string>();
+        private static Dictionary<string, IFuncParser> _StringFunctions = new Dictionary<string, IFuncParser>();
 
         private static Dictionary<string, IFuncParser> _ScalarFunctions = new Dictionary<string, IFuncParser>();
 
-        static FunctionMappings()
+        static FuncMaps()
         {
             InitStringFunctions();
 
@@ -20,7 +20,7 @@ namespace FluentKusto
 
         private static void InitStringFunctions()
         {
-            _StringFunctions.Add("", "");
+            _StringFunctions.Add("equal", new StringEqualParser());
         }
 
         private static void InitScalarFunctions()
@@ -28,7 +28,17 @@ namespace FluentKusto
              _ScalarFunctions.Add("ago", new AgoParser());
         }
 
-        public static IFuncParser GetScalarFunctionParser(string methodName)
+        public static IFuncParser ResolveScalarFuncParser(string methodName)
+        {
+            var kv =_ScalarFunctions.FirstOrDefault(x => x.Key == methodName);
+
+            if(kv.Key == null)
+                throw new Exception($"Function {methodName} not found in FunctionMappings");
+
+            return  kv.Value;
+        }
+
+        public static IFuncParser ResolveStringFuncParser(string methodName)
         {
             var kv =_ScalarFunctions.FirstOrDefault(x => x.Key == methodName);
 

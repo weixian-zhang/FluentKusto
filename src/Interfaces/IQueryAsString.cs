@@ -5,6 +5,6 @@ namespace FluentKusto
 {
     public interface IQueryAsString
     {
-        public string GetString();
+        public string QueryAsString();
     }
 }

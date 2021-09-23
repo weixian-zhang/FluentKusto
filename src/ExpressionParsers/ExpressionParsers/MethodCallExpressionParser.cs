@@ -10,7 +10,12 @@ namespace FluentKusto
 
             string methodName = method.Method.Name;
 
-            IFuncParser parser =  FunctionMappings.GetScalarFunctionParser(methodName);
+            IFuncParser parser;
+
+            if(method.Method.DeclaringType == typeof(StringOperatorExtensions))
+                parser =  FuncMaps.ResolveStringFuncParser(methodName);
+            else
+                parser = FuncMaps.ResolveScalarFuncParser(methodName);
 
             string query = parser.Parse(node);
 

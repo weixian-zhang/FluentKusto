@@ -11,9 +11,13 @@ namespace FluentKusto
 
              object value = constant.Value;
 
-             // return lower case boolean as Kusto boolean is lower case
+             // return lower case boolean as Kusto boolean prefers lower case
              if(value is bool)
                 return value.ToString().ToLower();
+
+             //double quote string values
+             if(value is string)
+                return $"\"{value.ToString()}\"";
 
             return constant.Value.ToString();
         }

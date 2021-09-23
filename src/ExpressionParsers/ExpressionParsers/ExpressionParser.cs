@@ -10,24 +10,35 @@ namespace FluentKusto
 
         static ExpressionParser()
         {
-            _parsers.Add("LogicalBinaryExpression", new BinaryExpressionParser());
+            _parsers.Add("BinaryExpression", new BinaryExpressionParser());
+
+             _parsers.Add("SimpleBinaryExpression", new BinaryExpressionParser());
 
             _parsers.Add("MethodCallExpression", new MethodCallExpressionParser());
 
-            _parsers.Add("MethodBinaryExpression", new BinaryExpressionParser());
+            _parsers.Add("MethodExpression", new BinaryExpressionParser());
 
-            _parsers.Add("PropertyExpression", new MemberExpressionParser());
+            _parsers.Add("MemberExpression", new MemberExpressionParser());
 
             _parsers.Add("ConstantExpression", new ConstantExpressionParser());
         }
 
         public static string Parse(Expression node)
         {
-            var exprTypeName = node.GetType().Name;
+            string typeName = "";
 
-            //TODO: fix method name inconsistency "MethodCallExpression1"
+            Type subType = node.GetType();
 
-            var parser = _parsers[exprTypeName];
+            //-multiple methodcallexpressions result in Type name with appended with number
+            // e.g MethodBinaryExpression1 -> MethodBinaryExpression1
+            //-BaseType name guarantee type name with number behind
+            //-Like ConstantExpression BaseType is Expression, this case to get subType name
+            if(!(subType.BaseType == typeof(Expression)))
+                typeName = subType.BaseType.Name;
+            else
+                typeName = subType.Name;
+
+            var parser = _parsers[typeName];
 
             string query = parser.Parse(node);
 

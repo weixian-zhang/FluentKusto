@@ -8,18 +8,18 @@ namespace FluentKusto
 
         private WhereVisitor _WhereVisitor;
 
-        public QueryParser( QueryBuilder queryBuilder)
+        public QueryParser(QueryBuilder queryBuilder)
         {
              _queryBuilder = queryBuilder;
 
             _WhereVisitor = new WhereVisitor();
         }
 
-        public void ParseWhere(Expression expression)
+        public string ParseWhere(Expression expression)
         {
             string where = _WhereVisitor.ParseQuery(expression);
 
-            _queryBuilder.Append(where);
+            return _queryBuilder.Append(where).ToString();
         }
     }
 }

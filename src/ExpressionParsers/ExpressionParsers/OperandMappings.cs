@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public static class OperandMappings
+    public static class OperandMaps
     {
         private static Dictionary<string, string> _StringComparisionOperands = new Dictionary<string, string>();
 
@@ -15,7 +15,7 @@ namespace FluentKusto
 
         private static Dictionary<ExpressionType, string> _LogicalComparisonOperands = new Dictionary<ExpressionType, string>();
 
-        static OperandMappings()
+        static OperandMaps()
         {
             InitStringComparisonOperands();
 
@@ -49,16 +49,12 @@ namespace FluentKusto
 
         private static void InitLogicalComparisonOperands()
         {
-            _LogicalComparisonOperands.Add(ExpressionType.Equal, "==");
-
-            _LogicalComparisonOperands.Add(ExpressionType.NotEqual, "!=");
-
             _LogicalComparisonOperands.Add(ExpressionType.AndAlso, "and");
 
             _LogicalComparisonOperands.Add(ExpressionType.OrElse, "or");
         }
 
-        public static string GetOperand(ExpressionType ntype)
+        public static string ResolveNumericOperand(ExpressionType ntype)
         {
             if(_NumericComparisonOperands.Keys.ToList().Exists(x => x == ntype))
             {
@@ -66,13 +62,13 @@ namespace FluentKusto
                 return kv.Value;
             }
 
-            if(_LogicalComparisonOperands.Keys.ToList().Exists(x => x == ntype))
-            {
-                var kv = _NumericComparisonOperands.FirstOrDefault(x => x.Key == ntype);
-                return kv.Value;
-            }
-
             throw new Exception($"Operand not found for {ntype.ToString()}");
+        }
+
+        public static string ResolveLogicalOperand(ExpressionType ntype)
+        {
+            var kv = _LogicalComparisonOperands.FirstOrDefault(x => x.Key == ntype);
+            return kv.Value;
         }
     }
 }

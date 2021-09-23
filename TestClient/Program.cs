@@ -21,8 +21,9 @@ namespace FluentKusto.TestClient
             // kql = Kusto.New();
 
             kql.Update.Where(x =>
+                x.ApprovalSource.equal("AAB") &&
                 x.Approved == true ||
-                x.TimeGenerated > Kql.ago("3h") && x.ApprovalSource.equal("AAB"));
+                x.TimeGenerated > Kql.ago("3h"));
             kql = Kusto.New();
 
             // kql.Update.Where(x =>
@@ -32,9 +33,9 @@ namespace FluentKusto.TestClient
             // kql = Kusto.New();
 
             kql.Update.Where(x =>
-                x._SubscriptionId.equalnoncase("DasdasdsaDASDASdasdas") &&
-                x.TimeGenerated > Kql.ago("3h") || x.ApprovalSource.equal("AAB")
-                && x.CVENumbers.notequal("B") || x.Approved == true && x.Computer.equal("saasd"));
+                x._SubscriptionId.notequal("DasdasdsaDASDASdasdas") &&
+                x.TimeGenerated > Kql.ago("3h") || x.ApprovalSource.equal("Dsaa")
+                && x.CVENumbers.equal("sfaaa") || x.Approved == true && x.Computer.notequal("sda"));
             kql = Kusto.New();
 
             // kql.Update.Where(x =>

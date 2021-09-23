@@ -26,18 +26,26 @@ namespace FluentKusto
 
         private string ParseQueryInternal()
         {
-            var qb = new StringBuilder();
+            var qb = new QueryBuilder();
+
+            qb.AppendPipeNewLine("where");
 
             foreach(var ele in _FlattenedElements)
             {
                 //"normal" conditional expression
                 if(ele.ConditionType == ExpressionType.Lambda)
                 {
-                    string query = ExpressionParser.Parse(ele.Node);
+                   string query = ExpressionParser.Parse(ele.Node);
+
+                   string operand = OperandMaps.ResolveLogicalOperand(ele.ConditionType);
+
+                   qb.AppendWithSpace(operand);
+
+                   qb.AppendWithSpace(query);
                 }
             }
 
-            return qb.ToString();
+            return qb.Query();
         }
 
         private void FlattenExpression(Expression node)

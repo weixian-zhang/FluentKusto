@@ -41,11 +41,11 @@ namespace FluentKusto
             return this;
         }
 
-        public QueryBuilder AppendPipeNewLine()
+        public QueryBuilder AppendPipeNewLine(string opr)
         {
             _queryBuilder.Append(Environment.NewLine);
 
-            _queryBuilder.Append("|");
+            _queryBuilder.Append($"| {opr}");
 
             return this;
         }

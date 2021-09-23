@@ -38,7 +38,9 @@ namespace FluentKusto
 
         public ITabularOperator<T> Where(Expression<Func<T,object>> expression)
         {
-            _queryParser.ParseWhere(expression.Body);
+            string where = _queryParser.ParseWhere(expression.Body);
+
+            _queryBuilder.Append(where);
 
             return this;
         }
@@ -57,9 +59,9 @@ namespace FluentKusto
             throw new NotImplementedException();
         }
 
-        public string GetString()
+        public string QueryAsString()
         {
-            throw new NotImplementedException();
+            return _queryBuilder.ToString();
         }
 
         #endregion ITabularOperator
