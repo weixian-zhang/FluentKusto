@@ -84,6 +84,7 @@ namespace FluentKusto
             return true;
         }
 
+
         public static bool contains(this string str, string value) {
             return true;
         }
@@ -140,7 +141,7 @@ namespace FluentKusto
             return true;
         }
 
-        public static bool not(this string str, string value) {
+        public static bool notin(this string str, string value) {
             return true;
         }
 
