@@ -9,6 +9,8 @@ namespace FluentKusto
 
         public ITabularOperator<T> Project(Expression<Func<T,object>> project);
 
-        public IQueryAsString Run();
+        public QueryResult Run();
+
+        public string QueryAsString();
     }
 }

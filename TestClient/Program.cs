@@ -20,10 +20,11 @@ namespace FluentKusto.TestClient
             // .Where(x => x._SubscriptionId.equal("231312-2312-13123") || x.EventCategory.equal("Event"))
             // kql = Kusto.New();
 
-            kql.Update.Where(x =>
+            string q1 = kql.Update.Where(x =>
                 x.ApprovalSource.equal("AAB") &&
                 x.Approved == true ||
-                x.TimeGenerated > Kql.ago("3h"));
+                x.TimeGenerated > Kql.ago("3h")).QueryAsString();
+
             kql = Kusto.New();
 
             // kql.Update.Where(x =>

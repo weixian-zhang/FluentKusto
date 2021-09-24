@@ -21,7 +21,7 @@ namespace FluentKusto
 
             string where = ParseQueryInternal();
 
-            return "";
+            return where;
         }
 
         private string ParseQueryInternal()
@@ -37,12 +37,11 @@ namespace FluentKusto
                 {
                    string query = ExpressionParser.Parse(ele.Node);
 
-                   string operand = OperandMaps.ResolveLogicalOperand(ele.ConditionType);
-
-                   qb.AppendWithSpace(operand);
-
                    qb.AppendWithSpace(query);
                 }
+                else
+                    //appends and / or
+                    qb.AppendWithSpace(OperandMaps.ResolveLogicalOperand(ele.ConditionType));
             }
 
             return qb.Query();

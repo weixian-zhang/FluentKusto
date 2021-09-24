@@ -40,7 +40,7 @@ namespace FluentKusto
 
         public static IFuncParser ResolveStringFuncParser(string methodName)
         {
-            var kv =_ScalarFunctions.FirstOrDefault(x => x.Key == methodName);
+            var kv =_StringFunctions.FirstOrDefault(x => x.Key == methodName);
 
             if(kv.Key == null)
                 throw new Exception($"Function {methodName} not found in FunctionMappings");

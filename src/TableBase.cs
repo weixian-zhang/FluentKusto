@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public abstract class TableBase<T> : ITabularOperator<T>, IQueryAsString
+    public abstract class TableBase<T> : ITabularOperator<T>
     {
         private QueryBuilder _queryBuilder;
 
@@ -50,7 +50,7 @@ namespace FluentKusto
            return this;
         }
 
-        public IQueryAsString Run()
+        public QueryResult Run()
         {
             //TODO:
             // - call Azure Monitor Query library for DefaultAuth
@@ -61,7 +61,7 @@ namespace FluentKusto
 
         public string QueryAsString()
         {
-            return _queryBuilder.ToString();
+            return _queryBuilder.Query();
         }
 
         #endregion ITabularOperator

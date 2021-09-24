@@ -13,7 +13,8 @@ namespace FluentKusto
             IFuncParser parser;
 
             if(method.Method.DeclaringType == typeof(StringOperatorExtensions))
-                parser =  FuncMaps.ResolveStringFuncParser(methodName);
+                //return query if StringExtensionMethod
+                return StringFuncMaps.ParseStringMethod(node);
             else
                 parser = FuncMaps.ResolveScalarFuncParser(methodName);
 
