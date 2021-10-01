@@ -45,8 +45,6 @@ namespace FluentKusto
 
             _StringFuncToKustoOperands.Add("hasprefixcsnot", "!hasprefix_cs");
 
-            _StringFuncToKustoOperands.Add("hasprefixcsnot", "!hasprefix_cs");
-
             _StringFuncToKustoOperands.Add("hassuffix", "hassuffix");
 
             _StringFuncToKustoOperands.Add("hassuffixnot", "!hassuffix");

@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public class StringEqualParser : IFuncParser
+    public class Ago : IFuncParser
     {
         public string Parse(Expression node)
         {
@@ -11,9 +11,12 @@ namespace FluentKusto
 
             object arg = method.Arguments[0];
 
-            string value = arg.ToString();
+            string timespan = arg.ToString();
 
-            return $"== \"{value}\"";
+            if(string.IsNullOrEmpty(timespan))
+                throw new Exception("Missing argument in ago(), e.g 1d, 1m, 4h");
+
+            return $"ago({timespan})";
         }
     }
 }

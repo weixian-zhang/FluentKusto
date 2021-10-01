@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using FluentKusto;
+using Newtonsoft.Json;
 
 namespace FluentKusto.TestClient
 {
@@ -20,10 +23,16 @@ namespace FluentKusto.TestClient
             // .Where(x => x._SubscriptionId.equal("231312-2312-13123") || x.EventCategory.equal("Event"))
             // kql = Kusto.New();
 
-            string q1 = kql.Update.Where(x =>
-                x.ApprovalSource.equal("AAB") &&
-                x.Approved == true ||
-                x.TimeGenerated > Kql.ago("3h")).QueryAsString();
+            //create dynamic expression outside and pass intp Extend to convert intp Expresion. b   /
+            kql.Update
+                .Extend((t, c) =>
+                    new {
+                        ResourceArray = Kql.split(c.id_s, '/'),
+                        SecondLastResourceElement = c.ResourceArray[0]
+                    });
+
+                //.Project<Event>(evt => evt.Message, evt => evt.Role);
+
 
             kql = Kusto.New();
 
@@ -37,6 +46,9 @@ namespace FluentKusto.TestClient
                 x._SubscriptionId.notequal("DasdasdsaDASDASdasdas") &&
                 x.TimeGenerated > Kql.ago("3h") || x.ApprovalSource.equal("Dsaa")
                 && x.CVENumbers.equal("sfaaa") || x.Approved == true && x.Computer.notequal("sda"));
+
+
+
             kql = Kusto.New();
 
             // kql.Update.Where(x =>

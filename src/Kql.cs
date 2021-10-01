@@ -1,10 +1,31 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using System.Linq.Expressions;
+using Newtonsoft.Json.Linq;
 
 namespace FluentKusto
 {
+    public class Wrap
+    {
+      public dynamic Expr { get; set; }
+
+      public Wrap(dynamic a)
+      {
+
+      }
+
+    }
     public class Kql
     {
+      /// Use in Lambda expressions to mimic the behavior of referencing columns in other operators like Extend
+
+
+        public Kql()
+        {
+           //ColRef = new ExpandoObject();
+        }
+
         #region datetime funcs
 
         public static DateTime ago(string timespan)
@@ -12,19 +33,44 @@ namespace FluentKusto
            return DateTime.Now;
         }
 
+        public static object split(string str, char delimiter)
+        {
+           return new object();
+        }
+
         #endregion
 
         #region numeric funcs
 
-        public static bool In(string[] elements)
-        {
-           return true;
-        }
+      //   public static bool In(string[] elements)
+      //   {
+      //      return true;
+      //   }
 
-        public static bool NotIn(string[] elements)
-        {
-           return true;
-        }
+      //   public static bool NotIn(string[] elements)
+      //   {
+      //      return true;
+      //   }
+
+        #endregion
+
+        #region general helpers
+
+
+        /// Represents a n optional Column used by Extend, Project
+      //   public static ColumnAssignment<TTable> Column<TTable>(Expression<Func<TTable, object>> assignment)
+      //   {
+      //      return new ColumnAssignment<TTable>(assignment);
+      //   }
+
+      //   /// Represents a mandatory Column used by Extend, Project
+      //   public static ColumnAssignment<TTable> Column<TTable>(Expression<Func<TTable, object, object>> assignment)
+      //   {
+      //      return null;
+      //      //return new ColumnAssignment<TTable>(assignment);
+
+      //      //return new ColumnAssignment<TTable>(column, assignment);
+      //   }
 
         #endregion
 
