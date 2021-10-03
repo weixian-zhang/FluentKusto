@@ -24,13 +24,15 @@ namespace FluentKusto.TestClient
             // kql = Kusto.New();
 
             //create dynamic expression outside and pass intp Extend to convert intp Expresion. b   /
-            kql.Update
+            string q = kql.Update
                 .Extend((t, c) =>
                     new {
                         ResourceArray = Kql.split(c.id_s, '/'),
                         SecondLastResourceElement = c.ResourceArray[Kql.array_length(c.ResourceArray) - 2],
                         Pro = Kql.parse_json(t.Product).resourceProviderValue
-                    });
+                    })
+                .Where(t => t.TimeGenerated > Kql.ago("12h"))
+                .QueryAsString();
 
                 //.Project<Event>(evt => evt.Message, evt => evt.Role);
 

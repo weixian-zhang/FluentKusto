@@ -81,12 +81,47 @@ namespace FluentKusto
 
             string cleansedCode = CleanUpDecompiledCode(funcRawCode);
 
-            _QB.Append("");
+            _QB.AppendPipeNewLine("extend");
+
+            _QB.AppendWithSpace(cleansedCode);
 
             return this;
         }
 
-        private string CleanUpDecompiledCode(string code)
+        public ITabularOperator<T> Project(Expression<Func<T, object>> node)
+        {
+           //_QB.AppendPipeNewLine("project " + string.Join(", ", args));
+
+           return this;
+        }
+
+        public QueryResult Run()
+        {
+            //TODO:
+            // - call Azure Monitor Query library for DefaultAuth
+            // - or call Log Analytics via Http to support Workspace key, assuming Az Monitor Query
+            //does not support Woekspace key
+            throw new NotImplementedException();
+        }
+
+        public string QueryAsString()
+        {
+            return _QB.Query();
+        }
+
+        #endregion ITabularOperator
+
+
+        public void InitQueryBuilderWithTable()
+        {
+            string table = CurrentTableName();
+
+            _QB.Append($"{table}");
+        }
+
+        #region private helpers
+
+         private string CleanUpDecompiledCode(string code)
         {
             List<string> chsarpTypeNames = GetCSharpCharsToRemoveFromCode(code);
 
@@ -105,9 +140,9 @@ namespace FluentKusto
 
             string codeWithoutCloseCurlyBracEnd =  removeUpToReturnStatement.Remove(removeUpToReturnStatement.LastIndexOf('}') - 1, 2);
 
-            string codeWithTypes = RemoveCSharpCharsFromCode(codeWithoutCloseCurlyBracEnd, chsarpTypeNames);
+            string codeWithoutCSharpChars = RemoveCSharpCharsFromCode(codeWithoutCloseCurlyBracEnd, chsarpTypeNames);
 
-            return codeWithoutCloseCurlyBracEnd;
+            return codeWithoutCSharpChars;
         }
 
         // e.g (Update t, dynamic c), delete "t." and "c."
@@ -162,78 +197,6 @@ namespace FluentKusto
             return new Tuple<string, string>(param1, param2);
         }
 
-        public ITabularOperator<T> Project<TTable>(params Func<TTable, object>[] cols)
-        {
-           //_QB.AppendPipeNewLine("project " + string.Join(", ", args));
-
-           return this;
-        }
-
-        public QueryResult Run()
-        {
-            //TODO:
-            // - call Azure Monitor Query library for DefaultAuth
-            // - or call Log Analytics via Http to support Workspace key, assuming Az Monitor Query
-            //does not support Woekspace key
-            throw new NotImplementedException();
-        }
-
-        public string QueryAsString()
-        {
-            return _QB.Query();
-        }
-
-        #endregion ITabularOperator
-
-
-        public void InitQueryBuilderWithTable()
-        {
-            string table = CurrentTableName();
-
-            _QB.Append($"{table}");
-        }
-
-        // private Expression<Func<T, dynamic, object>> FuncToExpression(Func<T, dynamic, object> f)
-        // {
-        //     var mInfo = f.Method.ReturnType.GetMethods().First();
-
-        //     var anonyObj = mInfo.GetType();
-
-        //     bool isAnonym = anonyObj.Name.Contains("AnonymousType");
-
-
-
-        //     //var member = anonyObj.GetType().GetMember("MinusTime");
-
-
-        //     dynamic c = new ExpandoObject();
-        //     c.PublishedDate = DateTime.Now;
-
-        //     return f(new T(), c);
-        // }
-
-        // private Expression<Func<T, dynamic, object>>
-        //     ConvertExpression<TTable, TDynamic, TAnonymousObjectOutput>
-        //         (Expression<Func<TTable, TDynamic, TAnonymousObjectOutput>> expression)
-        // {
-        //     Expression<Func<object, TTable>> convertToTableInput = table => (TTable)table;
-
-        //     Expression<Func<object, TDynamic>> convertToDynamicInput = dyna => (TDynamic)dyna;
-
-        //     Expression<Func<TAnonymousObjectOutput, object>> convertToAnonyObjectOutput = anonymObj => (object)anonymObj;
-
-        //     // The following doesn't compile: var input = Expression.Parameter(typeof(dynamic), "input");
-
-        //     // var tableExpr = Expression.Parameter(typeof(object), "table");
-
-        //     // var dynamicExpr = Expression.Parameter(typeof(object), "dynamicVal");
-
-        //     // Expression<Func<TOutput, dynamic>> convertToOutput = value => (dynamic)value;
-
-        //     var body = Expression.Invoke(convertToAnonyObjectOutput, Expression.Invoke(expression, Expression.Invoke(convertToInput, input)));
-        //     var lambda = Expression.Lambda<Func<dynamic, dynamic>>(body, input);
-
-        //     return lambda;
-        // }
+        #endregion
     }
 }
