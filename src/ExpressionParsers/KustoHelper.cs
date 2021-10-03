@@ -7,6 +7,7 @@ namespace FluentKusto
     public static class KustoHelper
     {
 
+
         public static bool IsMemberAccess(Expression node)
         {
             if(node == null)

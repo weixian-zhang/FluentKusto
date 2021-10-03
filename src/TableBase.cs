@@ -8,94 +8,16 @@ using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using System.Reflection.PortableExecutable;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
-using ICSharpCode.Decompiler.Metadata;
-using ICSharpCode.ILSpy;
-using Mono.Cecil;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace FluentKusto
 {
-    class CustomAssemblyResolver : ICSharpCode.Decompiler.Metadata.IAssemblyResolver
-    {
-    private Dictionary<string, Assembly> _references;
-
-    public CustomAssemblyResolver(Assembly asm)
-    {
-        _references = new Dictionary<string, Assembly>();
-        var stack = new Stack<Assembly>();
-        stack.Push(asm);
-
-        while (stack.Count > 0)
-        {
-            var top = stack.Pop();
-            if (_references.ContainsKey(top.FullName)) continue;
-
-            _references[top.FullName] = top;
-
-            var refs = top.GetReferencedAssemblies();
-            if (refs != null && refs.Length > 0)
-            {
-                foreach (var r in refs)
-                {
-                    stack.Push(Assembly.Load(r));
-                }
-            }
-        }
-
-        ;
-    }
-
-        public PEFile Resolve(IAssemblyReference reference)
-        {
-            var asm = _references[reference.FullName];
-            var file = asm.Location;
-            return new PEFile(file, new FileStream(file, FileMode.Open, FileAccess.Read), PEStreamOptions.Default, MetadataReaderOptions.Default);
-        }
-
-        public async Task<PEFile> ResolveAsync(IAssemblyReference reference)
-        {
-            var asm = _references[reference.FullName];
-            var file = asm.Location;
-            var t = Task.Run (() => new PEFile(file, new FileStream(file, FileMode.Open, FileAccess.Read), PEStreamOptions.Default, MetadataReaderOptions.Default));
-
-            return t.Result;
-        }
-
-        public PEFile ResolveModule(PEFile mainModule, string moduleName)
-        {
-            var baseDir = Path.GetDirectoryName(mainModule.FileName);
-            var moduleFileName = Path.Combine(baseDir, moduleName);
-            if (!File.Exists(moduleFileName))
-            {
-                throw new Exception($"Module {moduleName} could not be found");
-            }
-
-            return new PEFile(moduleFileName, new FileStream(moduleFileName, FileMode.Open, FileAccess.Read), PEStreamOptions.Default, MetadataReaderOptions.Default);
-        }
-
-        public async Task<PEFile> ResolveModuleAsync(PEFile mainModule, string moduleName)
-        {
-            var baseDir = Path.GetDirectoryName(mainModule.FileName);
-            var moduleFileName = Path.Combine(baseDir, moduleName);
-            if (!File.Exists(moduleFileName))
-            {
-                throw new Exception($"Module {moduleName} could not be found");
-            }
-            var t = Task.Run
-                (() => new PEFile(moduleFileName, new FileStream(moduleFileName, FileMode.Open, FileAccess.Read), PEStreamOptions.Default, MetadataReaderOptions.Default));
-
-            return t.Result;
-        }
-    }
-
-
     public abstract class TableBase<T> : ITabularOperator<T> where T : new()
     {
         private QueryBuilder _QB;
-
-        private QueryParser _queryParser;
 
         private List<OperatorExpression<T>> _opsExpression;
 
@@ -106,8 +28,6 @@ namespace FluentKusto
             InitQueryBuilderWithTable();
 
             _opsExpression = new List<FluentKusto.OperatorExpression<T>>();
-
-            _queryParser = new QueryParser(_QB);
         }
 
         #region Non Operator methods
@@ -138,48 +58,109 @@ namespace FluentKusto
 
         public ITabularOperator<T> Where(Expression<Func<T,object>> expression)
         {
-            string where = _queryParser.ParseWhere(expression.Body);
+            var whereVisitor = new WhereVisitor();
 
-            _QB.Append(where);
+            string query = whereVisitor.ParseQuery(expression.Body);
+
+            _QB.Append(query);
 
             return this;
         }
 
-        // private static Expression<Func<T, dynamic, object>> FuncToExpression(Expression<Func<T, dynamic, object>> func)
-        // {
-        //     return (t, c) => func(t, c);
-        // }
-
-        //https://stackoverflow.com/questions/29944137/expression-trees-with-dynamic-parameter
-
-
-
-        public ITabularOperator<T> Extend(Func<T, dynamic, object> action)
+        // raw code e.g:
+        //"internal object <Main>b__0_0(Update t, dynamic c)\r\n{\r\n\treturn new\r\n\t{\r\n\t\tResourceArray = (object)Kql.split(c.id_s, '/'),\r\n\t\tSecondLastResourceElement = (object)c.ResourceArray[0]\r\n\t};\r\n}\r\n"
+        public ITabularOperator<T> Extend(Func<T, dynamic, object> func)
         {
-            // https://stackoverflow.com/questions/29567489/can-roslyn-generate-source-code-from-an-object-instance
-            // https://stackoverflow.com/questions/57231579/decompiling-anonymous-method-il-in-net-core
+            var assemFile = Assembly.GetCallingAssembly().Location;
 
-            // * https://csharp.hotexamples.com/examples/-/ICSharpCode.Decompiler.PlainTextOutput/-/php-icsharpcode.decompiler.plaintextoutput-class-examples.html
+            var decompiler = new CSharpDecompiler(assemFile, new DecompilerSettings());
 
-            var asm = Assembly.GetCallingAssembly();
-            var file = asm.Location;
+            var handle = (MethodDefinitionHandle)MetadataTokens.EntityHandle(func.Method.MetadataToken);
 
-            var decompiler = new CSharpDecompiler(file, new DecompilerSettings());
+            var funcRawCode = decompiler.DecompileAsString(handle);
 
-            var handle = (MethodDefinitionHandle)MetadataTokens.EntityHandle(action.Method.MetadataToken);
+            string cleansedCode = CleanUpDecompiledCode(funcRawCode);
 
-            var funcRawCode = decompiler.DecompileAsString(handle);//(new List<EntityHandle>() { method.Value });
+            _QB.Append("");
 
-            string noBreaklineCode = Regex.Replace(Regex.Replace(funcRawCode, @"\n|\r", " "), @"\s+", " ");
+            return this;
+        }
+
+        private string CleanUpDecompiledCode(string code)
+        {
+            List<string> chsarpTypeNames = GetCSharpCharsToRemoveFromCode(code);
+
+            string noBreaklineCode = Regex.Replace(Regex.Replace(code, @"\n|\r", " "), @"\s+", " ");
 
             string removeCodeTillCurlyBracket =
                 noBreaklineCode.Substring(noBreaklineCode.IndexOf('{'), noBreaklineCode.Length - noBreaklineCode.IndexOf('{'));
 
             string removeObjectCasting = removeCodeTillCurlyBracket.Replace("(object)", "");
 
-            return this;
+            int indexOfEndOfCurlyBrac = removeObjectCasting.IndexOf("new ") + "new ".Length;
+
+            int lastIndexOfCurlyBrac = removeObjectCasting.LastIndexOf("}") -1;
+
+            string removeUpToReturnStatement = removeObjectCasting.Substring(indexOfEndOfCurlyBrac);
+
+            string codeWithoutCloseCurlyBracEnd =  removeUpToReturnStatement.Remove(removeUpToReturnStatement.LastIndexOf('}') - 1, 2);
+
+            string codeWithTypes = RemoveCSharpCharsFromCode(codeWithoutCloseCurlyBracEnd, chsarpTypeNames);
+
+            return codeWithoutCloseCurlyBracEnd;
         }
 
+        // e.g (Update t, dynamic c), delete "t." and "c."
+        private string RemoveCSharpCharsFromCode(string code, IEnumerable<string> typeNamesToRemove)
+        {
+            string codeNoTypes = code;
+
+            foreach(string t in typeNamesToRemove)
+            {
+                codeNoTypes = codeNoTypes.Replace(t, "");
+            }
+
+            return codeNoTypes.Trim();
+        }
+
+        private List<string> GetCSharpCharsToRemoveFromCode(string code)
+        {
+             var typeNames = new List<string>(new string[]{"Kql.", "{", "}", ";"});
+
+            Tuple<string, string> paramVars = GetFuncParamerVariables(code);
+
+            string param1 = paramVars.Item1 + ".";
+            string param2 = paramVars.Item2 + ".";
+
+            typeNames.Add(param1);
+            typeNames.Add(param2);
+
+            return typeNames;
+        }
+
+        // e.g (Update t, dynamic c), get "t" and "c" variable names to remove them later
+        private Tuple<string, string> GetFuncParamerVariables(string code)
+        {
+            string param1 = "";
+            string param2 = "";
+
+            int indexFirstBracker = code.IndexOf('(') + 1;
+            int index2ndBracker = code.IndexOf(')');
+
+            string paramsBetweenBrackets = code.Substring(indexFirstBracker, index2ndBracker - indexFirstBracker);
+
+            string[] firstSecondParams = paramsBetweenBrackets.Split(',');
+
+            string[] firstParam = firstSecondParams[0].Trim().Split(' ');
+
+            param1 = firstParam[1];
+
+            string[] secondParam = firstSecondParams[1].Trim().Split(' ');
+
+            param2 = secondParam[1];
+
+            return new Tuple<string, string>(param1, param2);
+        }
 
         public ITabularOperator<T> Project<TTable>(params Func<TTable, object>[] cols)
         {

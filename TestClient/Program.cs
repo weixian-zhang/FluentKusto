@@ -28,7 +28,8 @@ namespace FluentKusto.TestClient
                 .Extend((t, c) =>
                     new {
                         ResourceArray = Kql.split(c.id_s, '/'),
-                        SecondLastResourceElement = c.ResourceArray[0]
+                        SecondLastResourceElement = c.ResourceArray[Kql.array_length(c.ResourceArray) - 2],
+                        Pro = Kql.parse_json(t.Product).resourceProviderValue
                     });
 
                 //.Project<Event>(evt => evt.Message, evt => evt.Role);

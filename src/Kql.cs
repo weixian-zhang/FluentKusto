@@ -33,10 +33,21 @@ namespace FluentKusto
            return DateTime.Now;
         }
 
-        public static object split(string str, char delimiter)
+        public static dynamic split(string str, char delimiter)
         {
            return new object();
         }
+
+        public static dynamic parse_json(string json)
+        {
+           return new object();
+        }
+
+        public static dynamic array_length(object array)
+        {
+           return new object();
+        }
+
 
         #endregion
 
