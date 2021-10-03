@@ -25,13 +25,20 @@ namespace FluentKusto.TestClient
 
             //create dynamic expression outside and pass intp Extend to convert intp Expresion. b   /
             string q = kql.Update
-                .Extend((t, c) =>
-                    new {
+                .Extend((t, c) => new {
                         ResourceArray = Kql.split(c.id_s, '/'),
-                        SecondLastResourceElement = c.ResourceArray[Kql.array_length(c.ResourceArray) - 2],
-                        Pro = Kql.parse_json(t.Product).resourceProviderValue
-                    })
+                        SecondLastResourceElement = c.ResourceArray[Kql.array_length(c.ResourceArray) - 2]
+                })
+                .Extend((t, c) => new {
+                     ResourceJson = Kql.parse_json(t.Product).resourceProviderValue
+                })
                 .Where(t => t.TimeGenerated > Kql.ago("12h"))
+                .Project((tbl, col) => new {
+                    RG = tbl.ResourceGroup,
+                    TriggeredTime = tbl.TimeGenerated,
+                    ResourceJson = col.ResourceJson,
+                    Title = tbl.Title
+                })
                 .QueryAsString();
 
                 //.Project<Event>(evt => evt.Message, evt => evt.Role);

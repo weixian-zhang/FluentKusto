@@ -68,7 +68,7 @@ namespace FluentKusto
         }
 
         // raw code e.g:
-        //"internal object <Main>b__0_0(Update t, dynamic c)\r\n{\r\n\treturn new\r\n\t{\r\n\t\tResourceArray = (object)Kql.split(c.id_s, '/'),\r\n\t\tSecondLastResourceElement = (object)c.ResourceArray[0]\r\n\t};\r\n}\r\n"
+        // internal object <Main>b__0_0(Update t, dynamic c)\r\n{\r\n\treturn new\r\n\t{\r\n\t\tResourceArray = (object)Kql.split(c.id_s, '/'),\r\n\t\tSecondLastResourceElement = (object)c.ResourceArray[0]\r\n\t};\r\n}\r\n"
         public ITabularOperator<T> Extend(Func<T, dynamic, object> func)
         {
             var assemFile = Assembly.GetCallingAssembly().Location;
@@ -79,20 +79,47 @@ namespace FluentKusto
 
             var funcRawCode = decompiler.DecompileAsString(handle);
 
-            string cleansedCode = CleanUpDecompiledCode(funcRawCode);
+            string query = RawCodeToKusto(funcRawCode);
 
             _QB.AppendPipeNewLine("extend");
 
-            _QB.AppendWithSpace(cleansedCode);
+            _QB.AppendWithSpace(query);
 
             return this;
         }
 
-        public ITabularOperator<T> Project(Expression<Func<T, object>> node)
+        public ITabularOperator<T> Project(Func<T, dynamic, object> func)
         {
-           //_QB.AppendPipeNewLine("project " + string.Join(", ", args));
+            var assemFile = Assembly.GetCallingAssembly().Location;
 
-           return this;
+            var decompiler = new CSharpDecompiler(assemFile, new DecompilerSettings());
+
+            var handle = (MethodDefinitionHandle)MetadataTokens.EntityHandle(func.Method.MetadataToken);
+
+            var funcRawCode = decompiler.DecompileAsString(handle);
+
+            string query = RawCodeToKusto(funcRawCode);
+
+            _QB.AppendPipeNewLine("project");
+
+            _QB.AppendWithSpace(query);
+
+            return this;
+        }
+
+        private string ToRawCode(Func<T, dynamic, object> func)
+        {
+            var assemFile = Assembly.GetCallingAssembly().Location;
+
+            var decompiler = new CSharpDecompiler(assemFile, new DecompilerSettings());
+
+            var handle = (MethodDefinitionHandle)MetadataTokens.EntityHandle(func.Method.MetadataToken);
+
+            var funcRawCode = decompiler.DecompileAsString(handle);
+
+            string query = RawCodeToKusto(funcRawCode);
+
+            return query;
         }
 
         public QueryResult Run()
@@ -121,7 +148,7 @@ namespace FluentKusto
 
         #region private helpers
 
-         private string CleanUpDecompiledCode(string code)
+         private string RawCodeToKusto(string code)
         {
             List<string> chsarpTypeNames = GetCSharpCharsToRemoveFromCode(code);
 
@@ -195,6 +222,11 @@ namespace FluentKusto
             param2 = secondParam[1];
 
             return new Tuple<string, string>(param1, param2);
+        }
+
+        public ITabularOperator<T1> Project<T1>(params ProjectColumn<T1>[] cols)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

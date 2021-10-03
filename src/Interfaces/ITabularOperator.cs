@@ -21,8 +21,14 @@ namespace FluentKusto
 
         public ITabularOperator<T> Where(Expression<Func<T,object>> where);
 
-        public ITabularOperator<T> Project<TTable>(params Func<TTable, object>[] cols);
+        /// Project returns an anonymous object where Member is the projected column name
+        /// T is kusto table
+        /// dynamic type represents dynamic Column that can reference any other extended columns or Kusto syntax
+        public ITabularOperator<T> Project(Func<T, dynamic, object> nod);
 
+        /// Extend returns an anonymous object where Member is the dynamically extended column name
+        /// T is kusto table
+        /// dynamic type represents dynamic Column that can reference any other extended columns or Kusto syntax
         public ITabularOperator<T> Extend(Func<T, dynamic, object> node);
 
         public QueryResult Run();
