@@ -107,6 +107,8 @@ namespace FluentKusto
             return this;
         }
 
+
+
         private string ToRawCode(Func<T, dynamic, object> func)
         {
             var assemFile = Assembly.GetCallingAssembly().Location;
@@ -121,6 +123,11 @@ namespace FluentKusto
 
             return query;
         }
+
+        //join
+        // requests
+        // | project operation_Id, appName, client_Browser
+        // | join kind=leftouter  exceptions on $left.appName == $right.assembly
 
         public QueryResult Run()
         {
@@ -224,10 +231,14 @@ namespace FluentKusto
             return new Tuple<string, string>(param1, param2);
         }
 
-        public ITabularOperator<T1> Project<T1>(params ProjectColumn<T1>[] cols)
+        public IJoinOn<T, TRight> Join<TRight>
+            (JoinKind kind, Func<T, TRight, object> node, Expression<Func<TRight, object>> rightQueryNode)
         {
             throw new NotImplementedException();
         }
+
+
+
 
         #endregion
     }

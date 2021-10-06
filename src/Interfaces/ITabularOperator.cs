@@ -4,16 +4,6 @@ using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public class Column
-    {
-        private object _column;
-
-        public object this[object col]
-        {
-            get { return _column; }
-            set { _column = value; }
-        }
-    }
 
     public interface ITabularOperator<T>
     {
@@ -30,6 +20,9 @@ namespace FluentKusto
         /// T is kusto table
         /// dynamic type represents dynamic Column that can reference any other extended columns or Kusto syntax
         public ITabularOperator<T> Extend(Func<T, dynamic, object> node);
+
+        public IJoinOn<T, TRight> Join<TRight>
+            (JoinKind kind, Expression<Func<TRight, object>> rightQueryNode);
 
         public QueryResult Run();
 

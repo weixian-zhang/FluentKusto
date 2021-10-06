@@ -13,17 +13,6 @@ namespace FluentKusto.TestClient
         {
             var kql = Kusto.New();
 
-            //kql.Update.Where(x => x.Approved == true);
-            //kql = Kusto.New();
-
-            // kql.AACAudit.Where(x => x._SubscriptionId.equal("wdwa"));
-            // kql = Kusto.New();
-
-            // kql.AACAudit
-            // .Where(x => x._SubscriptionId.equal("231312-2312-13123") || x.EventCategory.equal("Event"))
-            // kql = Kusto.New();
-
-            //create dynamic expression outside and pass intp Extend to convert intp Expresion. b   /
             string q = kql.Update
                 .Extend((t, c) => new {
                         ResourceArray = Kql.split(c.id_s, '/'),
@@ -41,10 +30,15 @@ namespace FluentKusto.TestClient
                 })
                 .QueryAsString();
 
-                //.Project<Event>(evt => evt.Message, evt => evt.Role);
 
-
+            // join example
             kql = Kusto.New();
+
+            kql.AzureActivity
+                .Where(t => t.TenantId == "awer323")
+                .Join<Update>(JoinKind.innerunique, (update) => update.OSName == "Windows")
+                .On((activity, update) => activity.ResourceId == update.ResourceId);
+
 
             // kql.Update.Where(x =>
             //     x._SubscriptionId.equalnoncase("DasdasdsaDASDASdasdas") &&
