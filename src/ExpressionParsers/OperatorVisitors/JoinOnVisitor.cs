@@ -51,7 +51,7 @@ namespace FluentKusto
                    {
                        string member = ExpressionParser.Parse(ele.Node);
 
-                       qb.AppendWithSpace(query);
+                       qb.AppendWithSpace(member);
                    }
 
                 }
