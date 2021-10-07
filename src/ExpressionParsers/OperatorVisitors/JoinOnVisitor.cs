@@ -4,42 +4,60 @@ using System.Linq.Expressions;
 
 namespace FluentKusto
 {
-    public class WhereVisitor : ExpressionVisitor, IOperatorExpressionVisitor
+    public class JoinOnVisitor : ExpressionVisitor, IOperatorExpressionVisitor
     {
         List<ExpressionElement> _FlattenedElements;
 
-        public WhereVisitor()
+        public JoinOnVisitor()
         {
-            _FlattenedElements = new List<ExpressionElement>();
+             _FlattenedElements = new List<ExpressionElement>();
         }
 
         public string ParseQuery(Expression node)
         {
             FlattenExpression(node);
 
-            string where = ParseQueryInternal();
+            string on = ParseQueryInternal();
 
-            return where;
+            return on;
         }
 
         private string ParseQueryInternal()
         {
             var qb = new QueryBuilder();
 
-            qb.AppendPipeNewLine("where");
+            qb.AppendWithSpace("on");
 
             foreach(var ele in _FlattenedElements)
             {
                 //"normal" conditional expression
                 if(ele.ConditionType == ExpressionType.Lambda)
                 {
-                   string query = ExpressionParser.Parse(ele.Node);
+                   //binary equals
+                   if(ele.Node.NodeType == ExpressionType.Equal)
+                   {
+                       var binary = (BinaryExpression)ele.Node;
 
-                   qb.AppendWithSpace(query);
+                        string left = ExpressionParser.Parse(binary.Left);
+
+                        string right = ExpressionParser.Parse(binary.Right);
+
+                        string query = $"$left.{left} == $right.{right}";
+
+                        qb.AppendWithSpace(query);
+                   }
+                   //single member
+                   else
+                   {
+                       string member = ExpressionParser.Parse(ele.Node);
+
+                       qb.AppendWithSpace(query);
+                   }
+
                 }
                 else
-                    //appends and / or
-                    qb.AppendWithSpace(OperandMaps.ResolveLogicalOperand(ele.ConditionType));
+                    //comma(,) to chain multiple "on" consditions
+                    qb.AppendWithSpace(", ");
             }
 
             return qb.Query();
@@ -112,24 +130,6 @@ namespace FluentKusto
                 AddExpressionElement(node);
 
             return parentBinary != null ? parentBinary : node;
-        }
-
-        /// in case of binary tree traversal, whenever hitting any non-And/Or like MethodCall or Member
-        /// Visit will call overriden Visitor-Methods like this to capture non-And/Or binary expressions
-        protected override Expression VisitMethodCall(MethodCallExpression node)
-        {
-           AddExpressionElement(node);
-
-            return node;
-        }
-
-        /// in case of binary tree traversal, whenever hitting any non-And/Or like MethodCall or Member
-        /// Visit will call overriden Visitor-Methods like this to capture non-And/Or binary expressions
-        protected override Expression VisitMember(MemberExpression node)
-        {
-            AddExpressionElement(node);
-
-            return node;
         }
 
         private void AddExpressionElement(Expression node)

@@ -21,8 +21,8 @@ namespace FluentKusto
         /// dynamic type represents dynamic Column that can reference any other extended columns or Kusto syntax
         public ITabularOperator<T> Extend(Func<T, dynamic, object> node);
 
-        public IJoinOn<T, TRight> Join<TRight>
-            (JoinKind kind, Expression<Func<TRight, object>> rightQueryNode);
+        public IJoinOn<T> Join<TRight>
+            (JoinKind kind, ITabularOperator<TRight> rightQueryNode);
 
         public QueryResult Run();
 

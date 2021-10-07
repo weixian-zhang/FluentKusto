@@ -10,12 +10,10 @@ using System.Reflection.PortableExecutable;
 using System.Text.RegularExpressions;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 
 namespace FluentKusto
 {
-    public abstract class TableBase<T> : ITabularOperator<T> where T : new()
+    public abstract class TableBase<T> : ITabularOperator<T>, IJoinOn<T> where T : new()
     {
         private QueryBuilder _QB;
 
@@ -107,27 +105,38 @@ namespace FluentKusto
             return this;
         }
 
-
-
-        private string ToRawCode(Func<T, dynamic, object> func)
-        {
-            var assemFile = Assembly.GetCallingAssembly().Location;
-
-            var decompiler = new CSharpDecompiler(assemFile, new DecompilerSettings());
-
-            var handle = (MethodDefinitionHandle)MetadataTokens.EntityHandle(func.Method.MetadataToken);
-
-            var funcRawCode = decompiler.DecompileAsString(handle);
-
-            string query = RawCodeToKusto(funcRawCode);
-
-            return query;
-        }
-
+        //check on kusto syntax for multiple On property match conditions
         //join
         // requests
         // | project operation_Id, appName, client_Browser
         // | join kind=leftouter  exceptions on $left.appName == $right.assembly
+
+        public IJoinOn<T> Join<TRight>
+            (JoinKind kind, ITabularOperator<TRight> rightQuery)
+        {
+            string joinKind = $"kind={kind.ToString()}";
+
+            string rq = rightQuery.QueryAsString();
+
+            string fullJoinQuery = $"| join {joinKind} ({Environment.NewLine}{rq}{Environment.NewLine})";
+
+            _QB.Append(fullJoinQuery);
+
+            return this;
+        }
+
+        public ITabularOperator<T> On<TRight>(Expression<Func<T, TRight, object>> node)
+        {
+            var joinonVisitor = new JoinOnVisitor();
+
+            string query = joinonVisitor.ParseQuery(node.Body);
+
+            string fullOnQuery = $"on {query}";
+
+             _QB.Append(fullOnQuery);
+
+            return this;
+        }
 
         public QueryResult Run()
         {
@@ -154,6 +163,21 @@ namespace FluentKusto
         }
 
         #region private helpers
+
+        private string ToRawCode(Func<T, dynamic, object> func)
+        {
+            var assemFile = Assembly.GetCallingAssembly().Location;
+
+            var decompiler = new CSharpDecompiler(assemFile, new DecompilerSettings());
+
+            var handle = (MethodDefinitionHandle)MetadataTokens.EntityHandle(func.Method.MetadataToken);
+
+            var funcRawCode = decompiler.DecompileAsString(handle);
+
+            string query = RawCodeToKusto(funcRawCode);
+
+            return query;
+        }
 
          private string RawCodeToKusto(string code)
         {
@@ -230,15 +254,6 @@ namespace FluentKusto
 
             return new Tuple<string, string>(param1, param2);
         }
-
-        public IJoinOn<T, TRight> Join<TRight>
-            (JoinKind kind, Func<T, TRight, object> node, Expression<Func<TRight, object>> rightQueryNode)
-        {
-            throw new NotImplementedException();
-        }
-
-
-
 
         #endregion
     }
