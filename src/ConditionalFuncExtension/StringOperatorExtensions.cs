@@ -137,7 +137,7 @@ namespace FluentKusto
             return true;
         }
 
-        public static bool In(this string str, string value) {
+        public static bool In(this string str, params string[] value) {
             return true;
         }
 

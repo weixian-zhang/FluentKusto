@@ -19,15 +19,6 @@ namespace FluentKusto
              return this;
         }
 
-        public QueryBuilder AppendWithTab(string query)
-        {
-            _queryBuilder.Append("\t");
-
-            _queryBuilder.Append(query);
-
-            return this;
-        }
-
         public QueryBuilder AppendNewLine(string query)
         {
             _queryBuilder.Append(Environment.NewLine);
