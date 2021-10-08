@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using FluentKusto;
@@ -28,13 +29,27 @@ namespace FluentKusto.TestClient
             //     })
             //     .QueryAsString();
 
+            // simple join
+            string simpleJoin = Kusto.New().AzureActivity
+            .Join<AzureActivity>(JoinKind.rightanti, Kusto.New().AzureActivity)
+            .On<AzureActivity>((left, right) => left.OperationId)
+            .QueryAsString();
 
-            // join example
+            Debug.WriteLine(simpleJoin);
 
-            Kusto.New().AzureActivity
-                .Where(t => t.TenantId == "awer323")
-                .Join<Update>(JoinKind.innerunique, Kusto.New().Update)
-                .On<Update>((activity, update) => activity.ResourceId == update.ResourceId);
+            // join with right table filter expression
+            // string joinw_with_right_table_sub_query = Kusto.New().AzureActivity
+            //     .Where(t => t.TenantId == "awer323")
+            //     .Join<Update>(JoinKind.innerunique,
+            //         Kusto.New().Update
+            //             .Where(t => t.Title == "Some Title" && t.ApprovalSource == "System"
+            //             && t.TimeGenerated > Kql.ago("5h"))
+            //             .Extend((t, col) => new {NewColumn = t.TimeGenerated})
+            //     )
+            //     .On<Update>((activity, update) => activity.ResourceId == update.ResourceId)
+            //     .QueryAsString();
+
+            // Debug.WriteLine(joinw_with_right_table_sub_query);
 
 
             // Kusto.New().Update.Where(x =>

@@ -120,7 +120,7 @@ namespace FluentKusto
 
             string fullJoinQuery = $"| join {joinKind} ({Environment.NewLine}{rq}{Environment.NewLine})";
 
-            _QB.Append(fullJoinQuery);
+            _QB.AppendWithSpace(fullJoinQuery);
 
             return this;
         }
@@ -133,7 +133,7 @@ namespace FluentKusto
 
             string fullOnQuery = $"on {query}";
 
-             _QB.Append(fullOnQuery);
+             _QB.AppendNewLine(fullOnQuery);
 
             return this;
         }

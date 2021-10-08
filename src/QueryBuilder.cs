@@ -12,16 +12,6 @@ namespace FluentKusto
             _queryBuilder = new StringBuilder();
         }
 
-        // public void AppendWithNewLine(string query)
-        // {
-        //     if(_queryBuilder.Length == 0)
-        //         _queryBuilder.Append(query);
-
-        //     _queryBuilder.Append(Environment.NewLine);
-
-        //     _queryBuilder.Append(query);
-        // }
-
         public QueryBuilder Append(string query)
         {
              _queryBuilder.Append(query);
@@ -29,10 +19,31 @@ namespace FluentKusto
              return this;
         }
 
+        public QueryBuilder AppendWithTab(string query)
+        {
+            _queryBuilder.Append("\t");
+
+            _queryBuilder.Append(query);
+
+            return this;
+        }
+
+        public QueryBuilder AppendNewLine(string query)
+        {
+            _queryBuilder.Append(Environment.NewLine);
+
+            _queryBuilder.Append(query);
+
+            return this;
+        }
+
         public QueryBuilder AppendWithSpace(string query)
         {
             if(_queryBuilder.Length == 0)
+            {
                 _queryBuilder.Append(query);
+                return this;
+            }
 
             _queryBuilder.Append(" ");
 

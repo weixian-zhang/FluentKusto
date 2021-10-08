@@ -26,8 +26,6 @@ namespace FluentKusto
         {
             var qb = new QueryBuilder();
 
-            qb.AppendWithSpace("on");
-
             foreach(var ele in _FlattenedElements)
             {
                 //"normal" conditional expression
@@ -53,10 +51,9 @@ namespace FluentKusto
 
                        qb.AppendWithSpace(member);
                    }
-
                 }
                 else
-                    //comma(,) to chain multiple "on" consditions
+                    //comma(,) to chain multiple "on" conditions
                     qb.AppendWithSpace(", ");
             }
 
