@@ -30,13 +30,13 @@ namespace FluentKusto.TestClient
             //     .QueryAsString();
 
             // simple join
-            string simpleJoin = Kusto.New().AzureActivity
-            .Where(t => t.SourceSystem.In("A", "B", "BC", "DE"))
+            // string simpleJoin = Kusto.New().AzureActivity
+            // .Where(t => t.SourceSystem.In("A", "B", "BC", "DE"))
             // .Join<AzureActivity>(JoinKind.rightanti, Kusto.New().AzureActivity)
             // .On<AzureActivity>((left, right) => left.OperationId)
-            .QueryAsString();
+            // .QueryAsString();
 
-            Debug.WriteLine(simpleJoin);
+            // Debug.WriteLine(simpleJoin);
 
             // join with right table filter expression
             // string joinw_with_right_table_sub_query = Kusto.New().AzureActivity
@@ -53,11 +53,15 @@ namespace FluentKusto.TestClient
             // Debug.WriteLine(joinw_with_right_table_sub_query);
 
 
-            // Kusto.New().Update.Where(x =>
-            //     x._SubscriptionId.notequal("DasdasdsaDASDASdasdas") &&
-            //     x.TimeGenerated > Kql.ago("3h") || x.ApprovalSource.equal("Dsaa")
-            //     && x.CVENumbers.equal("sfaaa") || x.Approved == true && x.Computer.notequal("sda"));
+            string multi_conditions_string_operators = Kusto.New().Update.Where(tbl =>
+                tbl._SubscriptionId.notequal("DasdasdsaDASDASdasdas") &&
+                tbl.BulletinUrl.equalnoncase("http://somewebsite.com") &&
+                tbl.Computer.equal("Com1") &&
+                tbl.TimeGenerated > Kql.ago("3h") || tbl.ApprovalSource.equal("Admin")
+                && tbl.CVENumbers.equal("S11345T") || tbl.Approved == true)
+                .QueryAsString();
 
+            Debug.WriteLine(multi_conditions_string_operators);
 
             // Kusto.New().Update.Where(x =>
             //     x._SubscriptionId.equalnoncase("DasdasdsaDASDASdasdas") &&

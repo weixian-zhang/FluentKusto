@@ -10,17 +10,19 @@ namespace FluentKusto
     {
         //private static Dictionary<string, string> _StringFuncToKustoOperands = new Dictionary<string, string>();
 
-        private static Dictionary<string, IStringFuncParser> _StringFuncs = new Dictionary<string, IStringFuncParser>();
+        private static Dictionary<string, IStringFuncParser> _StringFuncs =
+            new Dictionary<string, IStringFuncParser>();
 
         static StringFuncMaps()
         {
-            //InitStringFunctions();
-
             InitStringFuncMaps();
         }
 
         private static void InitStringFuncMaps()
         {
+            _StringFuncs.Add("equal", new FluentKusto.equal());
+            _StringFuncs.Add("equalnoncase", new equalnoncase());
+            _StringFuncs.Add("notequal", new notequal());
             _StringFuncs.Add("In", new In());
         }
 

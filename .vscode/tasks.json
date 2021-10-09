@@ -35,6 +35,17 @@
             "options": {
                 "cwd": "${workspaceFolder}/Testclient"
             }
-        }
+        },
+        {
+            "label": "build Sample Console",
+            "command": "dotnet",
+            "args": [
+                "build"
+            ],
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/Samples/Console/FluentInterface.Samples.Console"
+            }
+        },
     ]
 }

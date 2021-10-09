@@ -11,10 +11,10 @@
       <HintPath>./dlls/ILSpy.BamlDecompiler.Plugin.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="ILSpy">
+    <!-- <Reference Include="ILSpy">
       <HintPath>./dlls/ILSpy.exe</HintPath>
       <SpecificVersion>False</SpecificVersion>
-    </Reference>
+    </Reference> -->
     <Reference Include="Mono.Cecil">
       <HintPath>./dlls/Mono.Cecil.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>

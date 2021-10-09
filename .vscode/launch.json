@@ -33,8 +33,22 @@
                 "WriteSchemaToFiles": "true",
                 "GenerateCSharpFromFiles": "false"
             }
+        },
+        {
+            "name": "Debug Sample Console",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build TestClient",
+            "program": "${workspaceFolder}/Samples/Console/FluentInterface.Samples.Console/bin/Debug/net5.0/FluentInterface.Samples.Console.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "env": {
+                "WriteSchemaToFiles": "true",
+                "GenerateCSharpFromFiles": "false"
+            }
         }
-
 
     ]
 }
