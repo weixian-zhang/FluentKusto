@@ -18,6 +18,9 @@ FluentKusto is a C# library that provides fluent interface and strongly typed Lo
 String operators are Extension methods
 * in - As **in** is a reserved keyword in C# for pass by refrence, this operator is implemented with capital I as In.  
   E.g: <code>"SourceSystem".**In**("System A", "System B", "System C")</code>
+* equal - tbl.Computer.equal("Com1")
+* notequal - tbl.Computer.notequal("Com1")
+* equalnoncase - tbl.BulletinUrl.equalnoncase("http://somewebsite.com")
 
 #### Supported Functions
 * ago - <code>Kql.ago("4h")</code>
@@ -26,10 +29,20 @@ String operators are Extension methods
 * array_length - <code>Kql.array_length(c.ResourceArray)</code>
 
 #### Examples 
-Simple Where with string operator "in"  
+* Simple Where with string operator "in"  
   <code>
   Kusto.New().AzureActivity
   </code>  
   <code>
   .Where(t => t.SourceSystem.In("A", "B", "BC", "DE"))
-  </code>
+  </code>  
+  
+ * Where with Join  
+ 
+ <code>Kusto.New().AzureActivity </code>  
+    <code>.Where(t => t.SourceSystem.In("A", "B", "BC", "DE"))</code>  
+    <code>.Join<AzureActivity>(JoinKind.rightanti,</code>  
+      <code>Kusto.New().AzureActivity</code>  
+      <code>)</code>  
+   <code>.On<AzureActivity>((left, right) => left.OperationId)</code>
+
