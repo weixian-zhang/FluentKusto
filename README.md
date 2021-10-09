@@ -5,7 +5,7 @@ FluentKusto is a C# library that provides fluent interface and strongly typed Lo
 * [Supported Scalar Operators](#supported-scalar-operators)
 * [Supported String Operators](#supported-string-operators)
 * [Supported Functions](#supported-functions)
-* [Examples](#examples)
+* [Examples](https://github.com/weixian-zhang/FluentKusto/blob/main/Samples/Console/FluentInterface.Samples.Console/Program.cs)
 
 #### Supported Scalar Operators  
 * Where
