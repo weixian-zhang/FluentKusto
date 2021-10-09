@@ -9,21 +9,20 @@ namespace FluentInterface.Samples.Console
         static void Main(string[] args)
         {
             //simple where
+            string simpleWhere = Kusto.New().AzureActivity
+            .Where(tbl => tbl.SourceSystem.In("Sys A", "Sys B", "Sys X"))
+            .QueryAsString();
+
+            Debug.WriteLine(simpleWhere);
+
             // simple join
-            // string simpleWhere = Kusto.New().AzureActivity
-            // .Where(tbl => tbl.SourceSystem.In("Sys A", "Sys B", "Sys X"))
-            // .QueryAsString();
+            string simpleJoin = Kusto.New().AzureActivity
+            .Where(t => t.SourceSystem.In("A", "B", "BC", "DE"))
+            .Join<AzureActivity>(JoinKind.rightanti, Kusto.New().AzureActivity)
+            .On<AzureActivity>((left, right) => left.OperationId)
+            .QueryAsString();
 
-            //  Debug.WriteLine(simpleWhere);
-
-            // simple join
-            // string simpleJoin = Kusto.New().AzureActivity
-            // .Where(t => t.SourceSystem.In("A", "B", "BC", "DE"))
-            // .Join<AzureActivity>(JoinKind.rightanti, Kusto.New().AzureActivity)
-            // .On<AzureActivity>((left, right) => left.OperationId)
-            // .QueryAsString();
-
-            // Debug.WriteLine(simpleJoin);
+            Debug.WriteLine(simpleJoin);
 
             //multi where conditions
             string multiWhere = Kusto.New().Update.Where(x =>
