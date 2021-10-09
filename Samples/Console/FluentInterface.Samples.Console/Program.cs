@@ -24,17 +24,6 @@ namespace FluentInterface.Samples.Console
 
             Debug.WriteLine(simpleJoin);
 
-            //multi where conditions
-            string multiWhere = Kusto.New().Update.Where(x =>
-                x._SubscriptionId.equalnoncase("DasdasdsaDASDASdasdas") &&
-                x.TimeGenerated > Kql.ago("3h") || x.ApprovalSource.equal("AAB")
-                && x.CVENumbers.notequal("B") || x.Approved == true && x.Computer.equal("saasd") ||
-                x.Classification.notequal("B") && x.BulletinUrl == "http://somewebsite.com" ||
-                 x.BulletinID == "AADSA31" && x.Approved == true)
-                .QueryAsString();
-
-            Debug.WriteLine(multiWhere);
-
             //multi where conditions with string operators
             string multi_conditions_string_operators = Kusto.New().Update.Where(tbl =>
                 tbl._SubscriptionId.notequal("DasdasdsaDASDASdasdas") &&
