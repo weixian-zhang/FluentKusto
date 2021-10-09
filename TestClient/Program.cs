@@ -31,8 +31,9 @@ namespace FluentKusto.TestClient
 
             // simple join
             string simpleJoin = Kusto.New().AzureActivity
-            .Join<AzureActivity>(JoinKind.rightanti, Kusto.New().AzureActivity)
-            .On<AzureActivity>((left, right) => left.OperationId)
+            .Where(t => t.SourceSystem.In("A", "B", "BC", "DE"))
+            // .Join<AzureActivity>(JoinKind.rightanti, Kusto.New().AzureActivity)
+            // .On<AzureActivity>((left, right) => left.OperationId)
             .QueryAsString();
 
             Debug.WriteLine(simpleJoin);

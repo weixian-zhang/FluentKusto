@@ -8,19 +8,22 @@ namespace FluentKusto
     {
         private static Dictionary<string, string> _CSharpFuncToKustoFuncNames = new Dictionary<string, string>();
 
+        /// Equals
         public static bool equal(this string str, string value) {
              return true;
         }
 
+        /// Equals but not case sentive
         public static bool equalnoncase(this string str, string value) {
              return true;
         }
 
-
+        /// Not equals
         public static bool notequal(this string str, string value) {
              return true;
         }
 
+        ///Not equals and not case sentive
         public static bool notequalnoncase(this string str, string value) {
              return true;
         }
@@ -137,8 +140,8 @@ namespace FluentKusto
             return true;
         }
 
-        public static bool In(this string str, params string[] value) {
-            return true;
+        public static object In(this string str, params string[] value) {
+            return new object();
         }
 
         public static bool notin(this string str, string value) {

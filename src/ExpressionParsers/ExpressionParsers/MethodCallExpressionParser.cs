@@ -10,15 +10,21 @@ namespace FluentKusto
 
             string methodName = method.Method.Name;
 
-            IFuncParser parser;
+            string query;
 
             if(method.Method.DeclaringType == typeof(StringOperatorExtensions))
+            {
                 //return query if StringExtensionMethod
-                return StringFuncMaps.ParseStringMethod(node);
-            else
-                parser = FuncMaps.ResolveScalarFuncParser(methodName);
+                var strParser = StringFuncMaps.GetParser(methodName);
 
-            string query = parser.Parse(node);
+                query = strParser.Parse(node);
+            }
+            else
+            {
+                var parser = FuncMaps.GetParser(methodName);
+
+                query = parser.Parse(node);
+            }
 
             return query;
         }

@@ -20,7 +20,7 @@ namespace FluentKusto
              _ScalarFunctions.Add("ago", new Ago());
         }
 
-        public static IFuncParser ResolveScalarFuncParser(string methodName)
+        public static IFuncParser GetParser(string methodName)
         {
             var kv =_ScalarFunctions.FirstOrDefault(x => x.Key == methodName);
 
