@@ -5,12 +5,21 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Azure;
+using Azure.Identity;
+using Azure.Monitor.Query;
+using Azure.Monitor.Query.Models;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
+using Microsoft.Azure.ApplicationInsights.Query;
+using Microsoft.Azure.ApplicationInsights.Query.Models;
+using Microsoft.Rest;
+using Microsoft.Rest.Azure.Authentication;
 
 namespace FluentKusto
 {
-    public abstract class TableBase<T> : ITabularOperator<T>, IJoinOn<T> where T : new()
+    public abstract class TableBase<T> : ITabularOperator<T>, IJoinOn<T>, IKqlExecutor where T : new()
     {
         private QueryBuilder _QB;
 
@@ -102,12 +111,6 @@ namespace FluentKusto
             return this;
         }
 
-        //check on kusto syntax for multiple On property match conditions
-        //join
-        // requests
-        // | project operation_Id, appName, client_Browser
-        // | join kind=leftouter  exceptions on $left.appName == $right.assembly
-
         public IJoinOn<T> Join<TRight>
             (JoinKind kind, ITabularOperator<TRight> rightQuery)
         {
@@ -135,13 +138,9 @@ namespace FluentKusto
             return this;
         }
 
-        public QueryResult Run()
+        public IKqlExecutor Run()
         {
-            //TODO:
-            // - call Azure Monitor Query library for DefaultAuth
-            // - or call Log Analytics via Http to support Workspace key, assuming Az Monitor Query
-            //does not support Woekspace key
-            throw new NotImplementedException();
+            return this;
         }
 
         public string QueryAsString()
@@ -149,8 +148,36 @@ namespace FluentKusto
             return _QB.Query();
         }
 
+        public async Task<LogsQueryResult> OnLogAnalytics(string workspaceId)
+        {
+            var azcred = new DefaultAzureCredential();
+
+            var kqlClient = new LogsQueryClient(azcred);
+
+            string query = _QB.Query();
+
+            Response<LogsQueryResult> response =
+                await kqlClient.QueryWorkspaceAsync(workspaceId, query, new QueryTimeRange());
+
+            LogsQueryResult result =  response.Value;
+
+            return null;
+        }
+
+        public async Task<QueryResults> OnAppInsights(string appId, string clientId, string clientSecret)
+        {
+            var azcred = await ApplicationTokenProvider.LoginSilentAsync(appId, clientId,clientSecret);
+
+            var appinsightsClient = new ApplicationInsightsDataClient(azcred);
+
+            var result = await appinsightsClient.Query.ExecuteAsync(appId, _QB.Query());
+
+            return result;
+        }
+
         #endregion ITabularOperator
 
+        #region private helpers
 
         public void InitQueryBuilderWithTable()
         {
@@ -158,8 +185,6 @@ namespace FluentKusto
 
             _QB.Append($"{table}");
         }
-
-        #region private helpers
 
         private string ToRawCode(Func<T, dynamic, object> func)
         {

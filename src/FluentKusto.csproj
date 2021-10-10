@@ -11,10 +11,6 @@
       <HintPath>./dlls/ILSpy.BamlDecompiler.Plugin.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <!-- <Reference Include="ILSpy">
-      <HintPath>./dlls/ILSpy.exe</HintPath>
-      <SpecificVersion>False</SpecificVersion>
-    </Reference> -->
     <Reference Include="Mono.Cecil">
       <HintPath>./dlls/Mono.Cecil.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
@@ -23,5 +19,9 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.0-4.final"/>
+    <PackageReference Include="Azure.Identity" Version="1.4.1"/>
+    <PackageReference Include="Azure.Monitor.Query" Version="1.0.0"/>
+    <PackageReference Include="Microsoft.Azure.ApplicationInsights.Query" Version="1.0.0"/>
+    <PackageReference Include="Microsoft.Rest.ClientRuntime.Azure.Authentication" Version="2.4.1"/>
   </ItemGroup>
 </Project>

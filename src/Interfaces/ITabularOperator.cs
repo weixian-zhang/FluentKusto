@@ -24,7 +24,7 @@ namespace FluentKusto
         public IJoinOn<T> Join<TRight>
             (JoinKind kind, ITabularOperator<TRight> rightQueryNode);
 
-        public QueryResult Run();
+        public IKqlExecutor Run();
 
         public string QueryAsString();
     }

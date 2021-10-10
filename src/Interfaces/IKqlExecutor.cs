@@ -1,9 +1,13 @@
+using System.Threading.Tasks;
+using Azure.Monitor.Query.Models;
+using Microsoft.Azure.ApplicationInsights.Query.Models;
+
 namespace FluentKusto
 {
     public interface IKqlExecutor
     {
-        public QueryResult Run();
+        public Task<LogsQueryResult> OnLogAnalytics(string workspaceId);
 
-        public string QueryAsString();
+        public Task<QueryResults> OnAppInsights(string appId, string clientId, string clientSecret);
     }
 }
