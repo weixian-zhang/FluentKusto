@@ -17,6 +17,7 @@ namespace FluentKusto.TestClient
         {
             ConfigInit();
 
+            string tenantId = _config["TenantId"];
             string appId = _config["AppInsightsAppId"];
             string clientId = _config["ClientId"];
             string clientSecret = _config["ClientSecret"];
@@ -80,23 +81,20 @@ namespace FluentKusto.TestClient
             //     && x.Approved == true);
             // kql = Kusto.New();
 
-            // var result = Kusto.New().Update.Where(tbl =>
-            //     tbl._SubscriptionId.notequal("DasdasdsaDASDASdasdas") &&
-            //     tbl.BulletinUrl.equalnoncase("http://somewebsite.com") &&
-            //     tbl.Computer.equal("Com1") &&
-            //     tbl.TimeGenerated > Kql.ago("3h") || tbl.ApprovalSource.equal("Admin")
-            //     && tbl.CVENumbers.equal("S11345T") || tbl.Approved == true)
-            //     .Run()
-            //         .OnLogAnalytics("4cecddb2-c069-488a-b3a1-d9bf129168bf").Result;
-
-            var result = Kusto.New().Update.Where(tbl =>
+            var wr = Kusto.New().Update.Where(tbl =>
                 tbl._SubscriptionId.notequal("DasdasdsaDASDASdasdas") &&
                 tbl.BulletinUrl.equalnoncase("http://somewebsite.com") &&
                 tbl.Computer.equal("Com1") &&
                 tbl.TimeGenerated > Kql.ago("3h") || tbl.ApprovalSource.equal("Admin")
                 && tbl.CVENumbers.equal("S11345T") || tbl.Approved == true)
                 .Run()
-                    .OnAppInsights(appId, clientId, clientSecret);
+                    .OnLogAnalytics("4cecddb2-c069-488a-b3a1-d9bf129168bf").Result;
+
+
+            var ar = Kusto.New().requests
+                .Run()
+                    .OnAppInsights(tenantId, appId, clientId, clientSecret)
+                    .GetAwaiter().GetResult();
         }
 
         private static void ConfigInit()

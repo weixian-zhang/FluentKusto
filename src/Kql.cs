@@ -87,6 +87,8 @@ namespace FluentKusto
 
         #region Tables
 
+        public ITabularOperator<requests> requests{ get; set; } = new requests();
+
         public ITabularOperator<AACAudit> AACAudit{ get; set; } = new AACAudit();
 
         public ITabularOperator<AACHttpRequest> AACHttpRequest{ get; set; } = new AACHttpRequest();

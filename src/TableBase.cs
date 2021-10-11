@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Reflection.Metadata;
@@ -46,12 +47,6 @@ namespace FluentKusto
         #endregion
 
         #region ITabularOperator
-
-        //where
-        //count
-        //project
-        //extend
-        //join
 
         public ITabularOperator<T> Count()
         {
@@ -161,18 +156,38 @@ namespace FluentKusto
 
             LogsQueryResult result =  response.Value;
 
-            return null;
-        }
-
-        public async Task<QueryResults> OnAppInsights(string appId, string clientId, string clientSecret)
-        {
-            var azcred = await ApplicationTokenProvider.LoginSilentAsync(appId, clientId,clientSecret);
-
-            var appinsightsClient = new ApplicationInsightsDataClient(azcred);
-
-            var result = await appinsightsClient.Query.ExecuteAsync(appId, _QB.Query());
 
             return result;
+        }
+
+        public async Task<QueryResults> OnAppInsights(string tenantId, string appId, string clientId, string clientSecret)
+        {
+            try
+            {
+                var authEndpoint = "https://login.microsoftonline.com";
+                var tokenAudience = "https://api.applicationinsights.io/";
+
+                var adSettings = new ActiveDirectoryServiceSettings
+                {
+                    AuthenticationEndpoint = new Uri(authEndpoint),
+                    TokenAudience = new Uri(tokenAudience),
+                    ValidateAuthority = true
+                };
+
+                var azcred = ApplicationTokenProvider.LoginSilentAsync
+                    (tenantId, clientId, clientSecret, adSettings).GetAwaiter().GetResult();
+
+                var appinsightsClient = new ApplicationInsightsDataClient(azcred);
+
+                var result = await appinsightsClient.Query.ExecuteAsync(appId, _QB.Query());
+
+                return result;
+            }
+            catch(Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         #endregion ITabularOperator

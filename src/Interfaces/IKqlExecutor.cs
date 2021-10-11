@@ -8,6 +8,6 @@ namespace FluentKusto
     {
         public Task<LogsQueryResult> OnLogAnalytics(string workspaceId);
 
-        public Task<QueryResults> OnAppInsights(string appId, string clientId, string clientSecret);
+        public Task<QueryResults> OnAppInsights(string tenantId, string appId, string clientId, string clientSecret);
     }
 }
