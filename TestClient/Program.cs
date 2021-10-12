@@ -39,23 +39,20 @@ namespace FluentKusto.TestClient
             //     })
             //     .QueryAsString();
 
-            // Kusto.New().Update
-            //     .Extend((t, c) => new {
-            //             ResourceArray = Kql.split(c.id_s, '/'),
-            //             SecondLastResourceElement = c.ResourceArray[Kql.array_length(c.ResourceArray) - 2]
-            //     })
-            //     .Extend((t, c) => new {
-            //          ResourceJson = Kql.parse_json(t.Product).resourceProviderValue
-            //     })
-            //     .Where(t => t.TimeGenerated > Kql.ago("12h"))
-            //     .Project((tbl, col) => new {
-            //         RG = tbl.ResourceGroup,
-            //         TriggeredTime = tbl.TimeGenerated,
-            //         ResourceJson = col.ResourceJson,
-            //         Title = tbl.Title
-            //     })
-            //     .Run()
-            //     .OnLogAnalytics("workspace Id");
+            Kusto.New().Update
+                .Extend((tbl, col) => new {
+                        ResourceArray = Kql.split(col.id_s, '/'),
+                        SecondLastResourceElement = col.ResourceArray[Kql.array_length(col.ResourceArray) - 2]
+                })
+                .Where(t => t.TimeGenerated > Kql.ago("12h"))
+                .Project((tbl, col) => new {
+                    RG = tbl.ResourceGroup,
+                    TriggeredTime = tbl.TimeGenerated,
+                    ResourceJson = col.ResourceJson,
+                    Title = tbl.Title
+                })
+                .Run()
+                    .OnLogAnalytics("workspace Id");
 
 
             // simple join
