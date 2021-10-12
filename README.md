@@ -10,7 +10,7 @@ Nuget package will be publish in future.
 * [Supported String Operators](#supported-string-operators)
 * [Supported Functions](#supported-functions)
 * [Kusto Dynamic Column with .Net dynamic Type](#kusto-dynamic-column-with-net-dynamic-type)
-* <a href="https://github.com/weixian-zhang/FluentKusto/blob/main/Samples/Console/FluentInterface.Samples.Console/Program.cs" target="_blank">Example</a>
+* <a href="https://github.com/weixian-zhang/FluentKusto/blob/main/Samples/Console/FluentInterface.Samples.Console/Program.cs" target="_blank"><span>Example</span></a>
 
 #### Supported Scalar Operators  
 * Where
