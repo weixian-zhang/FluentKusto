@@ -89,6 +89,24 @@ namespace FluentKusto
 
         public ITabularOperator<requests> requests{ get; set; } = new requests();
 
+        public ITabularOperator<availabilityResults> availabilityResults{ get; set; } = new availabilityResults();
+
+        public ITabularOperator<browserTimings> browserTimings{ get; set; } = new browserTimings();
+
+        public ITabularOperator<customEvents> customEvents{ get; set; } = new customEvents();
+
+        public ITabularOperator<customMetrics> customMetrics{ get; set; } = new customMetrics();
+
+        public ITabularOperator<dependencies> dependencies{ get; set; } = new dependencies();
+
+        public ITabularOperator<exceptions> exceptions{ get; set; } = new exceptions();
+
+        public ITabularOperator<pageViews> pageViews{ get; set; } = new pageViews();
+
+        public ITabularOperator<performanceCounters> performanceCounters{ get; set; } = new performanceCounters();
+
+        public ITabularOperator<traces> traces{ get; set; } = new traces();
+
         public ITabularOperator<AACAudit> AACAudit{ get; set; } = new AACAudit();
 
         public ITabularOperator<AACHttpRequest> AACHttpRequest{ get; set; } = new AACHttpRequest();
