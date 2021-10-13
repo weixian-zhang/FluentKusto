@@ -6,16 +6,6 @@ using Newtonsoft.Json.Linq;
 
 namespace FluentKusto
 {
-    public class Wrap
-    {
-      public dynamic Expr { get; set; }
-
-      public Wrap(dynamic a)
-      {
-
-      }
-
-    }
     public class Kql
     {
       /// Use in Lambda expressions to mimic the behavior of referencing columns in other operators like Extend

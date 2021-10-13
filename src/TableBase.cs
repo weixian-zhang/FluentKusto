@@ -145,6 +145,37 @@ namespace FluentKusto
 
         public async Task<LogsQueryResult> OnLogAnalytics(string workspaceId)
         {
+            var result = await ExecuteQueryOnLAW(workspaceId);
+            return result;
+        }
+
+        public async Task<Tuple<LogsQueryResult, string>> OnLogAnalyticsWithQueryOutput(string workspaceId)
+        {
+            var result = await ExecuteQueryOnLAW(workspaceId);
+            return new Tuple<LogsQueryResult, string>(result, _QB.Query());
+        }
+
+        public async Task<QueryResults> OnAppInsights(string tenantId, string appId, string clientId, string clientSecret)
+        {
+            var result = await ExecuteQueryOnAppInsights(tenantId, appId, clientId, clientSecret);
+            return result;
+        }
+
+
+
+        public async Task<Tuple<QueryResults, string>> OnAppInsightsWithQueryOutput
+            (string tenantId, string appId, string clientId, string clientSecret)
+        {
+            var result = await ExecuteQueryOnAppInsights(tenantId, appId, clientId, clientSecret);
+            return new Tuple<QueryResults, string>(result, _QB.Query());
+        }
+
+        #endregion ITabularOperator
+
+        #region private helpers
+
+        private async Task<LogsQueryResult> ExecuteQueryOnLAW(string workspaceId)
+        {
             var azcred = new DefaultAzureCredential();
 
             var kqlClient = new LogsQueryClient(azcred);
@@ -156,11 +187,11 @@ namespace FluentKusto
 
             LogsQueryResult result =  response.Value;
 
-
             return result;
         }
 
-        public async Task<QueryResults> OnAppInsights(string tenantId, string appId, string clientId, string clientSecret)
+        private async Task<QueryResults> ExecuteQueryOnAppInsights
+            (string tenantId, string appId, string clientId, string clientSecret)
         {
             try
             {
@@ -174,8 +205,8 @@ namespace FluentKusto
                     ValidateAuthority = true
                 };
 
-                var azcred = ApplicationTokenProvider.LoginSilentAsync
-                    (tenantId, clientId, clientSecret, adSettings).GetAwaiter().GetResult();
+                var azcred = await ApplicationTokenProvider.LoginSilentAsync
+                    (tenantId, clientId, clientSecret, adSettings);
 
                 var appinsightsClient = new ApplicationInsightsDataClient(azcred);
 
@@ -187,12 +218,7 @@ namespace FluentKusto
             {
                 throw ex;
             }
-
         }
-
-        #endregion ITabularOperator
-
-        #region private helpers
 
         public void InitQueryBuilderWithTable()
         {

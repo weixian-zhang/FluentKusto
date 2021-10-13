@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using FluentKusto;
+using Microsoft.Azure.ApplicationInsights.Query.Models;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -17,11 +18,13 @@ namespace FluentKusto.TestClient
         {
             ConfigInit();
 
-            string tenantId = _config["TenantId"];
-            string appId = _config["AppInsightsAppId"];
-            string clientId = _config["ClientId"];
-            string clientSecret = _config["ClientSecret"];
+            TestLogAnalytics();
 
+            TestAppinsights();
+        }
+
+        private static void TestLogAnalytics()
+        {
             // string q = Kusto.New().Update
             //     .Extend((t, c) => new {
             //             ResourceArray = Kql.split(c.id_s, '/'),
@@ -38,21 +41,6 @@ namespace FluentKusto.TestClient
             //         Title = tbl.Title
             //     })
             //     .QueryAsString();
-
-            Kusto.New().Update
-                .Extend((tbl, col) => new {
-                        ResourceArray = Kql.split(col.id_s, '/'),
-                        SecondLastResourceElement = col.ResourceArray[Kql.array_length(col.ResourceArray) - 2]
-                })
-                .Where(t => t.TimeGenerated > Kql.ago("12h"))
-                .Project((tbl, col) => new {
-                    RG = tbl.ResourceGroup,
-                    TriggeredTime = tbl.TimeGenerated,
-                    ResourceJson = col.ResourceJson,
-                    Title = tbl.Title
-                })
-                .Run()
-                    .OnLogAnalytics("workspace Id");
 
 
             // simple join
@@ -97,20 +85,46 @@ namespace FluentKusto.TestClient
             //     && x.Approved == true);
             // kql = Kusto.New();
 
-            var wr = Kusto.New().Update.Where(tbl =>
-                tbl._SubscriptionId.notequal("DasdasdsaDASDASdasdas") &&
-                tbl.BulletinUrl.equalnoncase("http://somewebsite.com") &&
-                tbl.Computer.equal("Com1") &&
-                tbl.TimeGenerated > Kql.ago("3h") || tbl.ApprovalSource.equal("Admin")
-                && tbl.CVENumbers.equal("S11345T") || tbl.Approved == true)
-                .Run()
-                    .OnLogAnalytics("4cecddb2-c069-488a-b3a1-d9bf129168bf").Result;
+            // var wr = Kusto.New().Update.Where(tbl =>
+            //     tbl._SubscriptionId.notequal("DasdasdsaDASDASdasdas") &&
+            //     tbl.BulletinUrl.equalnoncase("http://somewebsite.com") &&
+            //     tbl.Computer.equal("Com1") &&
+            //     tbl.TimeGenerated > Kql.ago("3h") || tbl.ApprovalSource.equal("Admin")
+            //     && tbl.CVENumbers.equal("S11345T") || tbl.Approved == true)
+            //     .Run()
+            //         .OnLogAnalytics("4cecddb2-c069-488a-b3a1-d9bf129168bf").Result;
+        }
 
+        private static void TestAppinsights()
+        {
+            string tenantId = _config["TenantId"];
+            string appId = _config["AppInsightsAppId"];
+            string clientId = _config["ClientId"];
+            string clientSecret = _config["ClientSecret"];
 
-            var ar = Kusto.New().requests
+            QueryResults result;
+            string query = string.Empty;
+
+            var appinsights_simple1 = Kusto.New().requests
                 .Run()
-                    .OnAppInsights(tenantId, appId, clientId, clientSecret)
+                    .OnAppInsightsWithQueryOutput(tenantId, appId, clientId, clientSecret)
                     .GetAwaiter().GetResult();
+
+            result = appinsights_simple1.Item1;
+            query = appinsights_simple1.Item2;
+
+            var appinsights_simpleJoin = Kusto.New().requests
+                .Join<exceptions>(JoinKind.innerunique,
+                    Kusto.New().exceptions
+                    .Where(t => t.severityLevel == 2)
+                )
+                .On<exceptions>((left, right) => left.operation_Id == right.operation_Id)
+                .Run()
+                    .OnAppInsightsWithQueryOutput(tenantId, appId, clientId, clientSecret)
+                    .GetAwaiter().GetResult();
+
+            result = appinsights_simpleJoin.Item1;
+            query = appinsights_simpleJoin.Item2;
         }
 
         private static void ConfigInit()
