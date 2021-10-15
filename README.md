@@ -2,8 +2,8 @@
 
 FluentKusto is a C# library that facilitates users to write [Kusto queries](https://docs.microsoft.com/en-us/azure/data-explorer/kusto/query/) in C# with fluent interface and strongly typed [Log Analytics tables](https://docs.microsoft.com/en-us/azure/azure-monitor/reference/tables/tables-category) and columns.  
 <br />
-This project is in an early stage and more Kusto operator support will be are added overtime.  
-Nuget package will be publish in future.  
+This project is in an early stage and more Kusto operators will be added overtime.  
+Nuget package to be made available in future.  
 
 
 * [Supported Scalar Operators](#supported-scalar-operators)
