@@ -42,7 +42,7 @@ namespace FluentKusto.Tests
 | where SourceSystem in (""A"", ""B"", ""BC"", ""DE"") | join kind=rightanti (
 AzureActivity
 )
-on OperationI";
+on OperationId";
 
             Assert.Equal(q, kql);
         }
