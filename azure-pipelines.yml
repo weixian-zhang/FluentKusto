@@ -24,12 +24,12 @@ steps:
   displayName: Restoring dependencies
   inputs:
     command: restore
-    projects: '/src/*.csproj'
+    projects: '**/src/*.csproj'
 
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
     command: build
-    projects: '/src/*.csproj'
+    projects: '**/src/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
