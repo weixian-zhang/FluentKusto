@@ -33,3 +33,10 @@ steps:
     projects: '**/src/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
+- task: DotNetCoreCLI@2
+  displayName: Run Unit Tests
+  inputs:
+    command: test
+    projects: '**/Test.UnitTests/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+
