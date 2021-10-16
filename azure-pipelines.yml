@@ -14,8 +14,6 @@ variables:
 
 steps:
 - checkout: self
-  path: /src
-  clean: 
 
 - task: UseDotNet@2
   inputs:
