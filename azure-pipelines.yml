@@ -17,12 +17,14 @@ steps:
   path: \src
 
 - task: DotNetCoreCLI@2
+  displayName: Restoring dependencies
   inputs:
-    command: 'restore'
+    command: restore
 
 - task: DotNetCoreCLI@2
+  displayName: Build
   inputs:
-    command: 'build'
+    command: build
+    projects: '**/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
-  displayName: 'dotnet build $(buildConfiguration)'
 
