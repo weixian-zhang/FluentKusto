@@ -26,6 +26,7 @@ steps:
   displayName: Restoring dependencies
   inputs:
     command: restore
+    projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
   displayName: Build
