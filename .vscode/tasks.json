@@ -26,7 +26,7 @@
             }
         },
         {
-            "label": "build TestClient",
+            "label": "build Test.Client",
             "command": "dotnet",
             "args": [
                 "build"
@@ -37,7 +37,18 @@
             }
         },
         {
-            "label": "build Sample Console",
+            "label": "build Sample.Console",
+            "command": "dotnet",
+            "args": [
+                "build"
+            ],
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}/Samples/Console"
+            }
+        },
+        {
+            "label": "build Test.UnitTests",
             "command": "dotnet",
             "args": [
                 "build"
