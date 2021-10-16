@@ -1,4 +1,6 @@
-# FluentKusto  
+## FluentKusto  
+
+[![Build Status](https://dev.azure.com/weixzha/FluentKusto/_apis/build/status/FluentKusto%20-%20GitHub?branchName=main)](https://dev.azure.com/weixzha/FluentKusto/_build/latest?definitionId=2&branchName=main)  
 
 FluentKusto is a C# library that facilitates users to write [Kusto queries](https://docs.microsoft.com/en-us/azure/data-explorer/kusto/query/) in C# with fluent interface and strongly typed [Log Analytics tables](https://docs.microsoft.com/en-us/azure/azure-monitor/reference/tables/tables-category) and columns.  
 <br />
