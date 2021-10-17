@@ -20,6 +20,8 @@ Nuget package to be made available in future.
 * Project
 * Join
 * Count  
+* Limit
+* Distinct, DistinctAll
 
 #### Supported String Operators  
 String operators are Extension methods
