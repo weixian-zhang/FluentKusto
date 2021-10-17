@@ -17,10 +17,7 @@ variables:
 steps:
 - checkout: self
 - task: nuget-security-analysis@0
-- task: CredScan@3
-  displayName: Credential Scanning
-  inputs:
-    enabled: true
+
 - task: UseDotNet@2
   displayName: Use DotNet 5.0
   inputs:
@@ -46,4 +43,21 @@ steps:
     command: test
     projects: '**/Test.UnitTests/*.csproj'
     arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+
+- task: CredScan@3
+  displayName: Credential Scanning
+  inputs:
+    enabled: true
+
+- task: RoslynAnalyzers@3
+  inputs:
+    userProvideBuildInfo: 'msBuildInfo'
+    msBuildVersion: '16.0'
+    msBuildArchitecture: 'amd64'
+    buildArchitectureRemoteAction: 
+
+- task: SdtReport@2
+  inputs:
+    GdnExportHtmlFile: true
+    GdnExportAllTools: true
 
