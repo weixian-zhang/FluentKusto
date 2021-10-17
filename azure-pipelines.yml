@@ -16,11 +16,12 @@ variables:
 
 steps:
 - checkout: self
+container:
+- task: nuget-security-analysis@0
 - task: CredScan@3
   displayName: Credential Scanning
   inputs:
     enabled: true
-    
 - task: UseDotNet@2
   displayName: Use DotNet 5.0
   inputs:
