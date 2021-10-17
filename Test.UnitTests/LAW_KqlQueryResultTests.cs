@@ -76,10 +76,10 @@ namespace FluentKusto.Tests
         public void Sinple_Join()
         {
             string q = Kusto.New().AzureActivity
-            .Where(t => t.SourceSystem.In("A", "B", "BC", "DE"))
-            .Join<AzureActivity>(JoinKind.rightanti, Kusto.New().AzureActivity)
-            .On<AzureActivity>((left, right) => left.OperationId)
-            .QueryAsString();
+                .Where(t => t.SourceSystem.In("A", "B", "BC", "DE"))
+                .Join<AzureActivity>(JoinKind.rightanti, Kusto.New().AzureActivity)
+                .On<AzureActivity>((left, right) => left.OperationId)
+                .QueryAsString();
 
             Debug.WriteLine(q);
 
@@ -173,6 +173,26 @@ on OperationId";
 
             string kql =
 @"Update
+| extend ANewColumn = SubscriptionId
+| distinct InstallTimeAvailable, InstallTimePredictionSeconds, CVENumbers, ANewColumn";
+
+            Assert.Equal(q,kql);
+        }
+
+        [Fact]
+        public void Distinct_With_Where_Extend_Dynamic_Column()
+        {
+            string q = Kusto.New().Update
+                .Where((t) => t.TimeGenerated > Kql.ago("24h"))
+                .Extend((t, col) => new {ANewColumn = t.SubscriptionId})
+                .Distinct((t, col) =>  new {t.InstallTimeAvailable, t.InstallTimePredictionSeconds, t.CVENumbers, col.ANewColumn})
+                .QueryAsString();
+
+            Debug.WriteLine(q);
+
+            string kql =
+@"Update
+| where TimeGenerated > ago(24h)
 | extend ANewColumn = SubscriptionId
 | distinct InstallTimeAvailable, InstallTimePredictionSeconds, CVENumbers, ANewColumn";
 

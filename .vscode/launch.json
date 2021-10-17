@@ -20,21 +20,6 @@
             }
         },
         {
-            "name": "Debug TestClient",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build TestClient",
-            "program": "${workspaceFolder}/TestClient/bin/Debug/net5.0/FluentKusto.TestClient.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}",
-            "stopAtEntry": false,
-            "console": "internalConsole",
-            "env": {
-                "WriteSchemaToFiles": "true",
-                "GenerateCSharpFromFiles": "false"
-            }
-        },
-        {
             "name": "Debug Sample Console",
             "type": "coreclr",
             "request": "launch",
