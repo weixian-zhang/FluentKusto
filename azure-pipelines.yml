@@ -1,4 +1,5 @@
 # ASP.NET Core
+ 
 
 # Build and test ASP.NET Core projects targeting .NET Core.
 # Add steps that run tests, create a NuGet package, deploy, and more:
@@ -15,9 +16,11 @@ variables:
 
 steps:
 - checkout: self
-
-- task: nuget-security-analysis@0
-
+- task: CredScan@3
+  displayName: Credential Scanning
+  inputs:
+    enabled: true
+    
 - task: UseDotNet@2
   displayName: Use DotNet 5.0
   inputs:
