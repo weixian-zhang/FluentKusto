@@ -8,6 +8,52 @@ namespace FluentKusto.Tests
 {
     public class LAW_KqlQueryResultTests
     {
+        [Theory]
+        [InlineData(50)]
+        [InlineData(100)]
+        [InlineData(200)]
+        public void Simple_Limit(int value)
+        {
+            string q = Kusto.New()
+                .Update
+                    .Limit(value)
+                    .QueryAsString();
+
+            Debug.WriteLine(q);
+
+            string actualQuery =
+@"Update
+| limit " + value.ToString();
+
+            Assert.Equal(q, actualQuery);
+
+        }
+
+        [Theory]
+        [InlineData(50)]
+        [InlineData(100)]
+        [InlineData(200)]
+        public void Complex_Limit(int value)
+        {
+            string q = Kusto.New()
+                .Update
+                    .Where((t) => t.SubscriptionId == "xxxx-xxx-xxx-xxxx" && t.Approved == true)
+                    .Limit(value)
+                    .Project((t, col) => new {RG = t.ResourceGroup, SubscriptionId = t.SubscriptionId, Approved = t.Approved})
+                    .QueryAsString();
+
+            Debug.WriteLine(q);
+
+            string actualQuery =
+@$"Update
+| where SubscriptionId == ""xxxx-xxx-xxx-xxxx"" and Approved == true
+| limit {value.ToString()}
+| project RG = ResourceGroup, SubscriptionId = SubscriptionId, Approved = Approved";
+
+            Assert.Equal(q, actualQuery);
+
+        }
+
         [Fact]
         public void Simple_Where()
         {
@@ -95,6 +141,56 @@ on OperationId";
 | extend ResourceJson = parse_json(Product).resourceProviderValue
 | where TimeGenerated > ago(12h)
 | project RG = ResourceGroup, TriggeredTime = TimeGenerated, ResourceJson = ResourceJson, Title = Title";
+
+            Assert.Equal(q,kql);
+        }
+
+        [Fact]
+        public void Simple_Distinct()
+        {
+            string q = Kusto.New().Update
+                .Distinct((t, col) =>  new {t.InstallTimeAvailable, t.InstallTimePredictionSeconds, t.CVENumbers})
+                .QueryAsString();
+
+            Debug.WriteLine(q);
+
+            string kql =
+@"Update
+| distinct InstallTimeAvailable, InstallTimePredictionSeconds, CVENumbers";
+
+            Assert.Equal(q,kql);
+        }
+
+        [Fact]
+        public void Distinct_With_Extend_Dynamic_Column()
+        {
+            string q = Kusto.New().Update
+            .Extend((t, col) => new {ANewColumn = t.SubscriptionId})
+                .Distinct((t, col) =>  new {t.InstallTimeAvailable, t.InstallTimePredictionSeconds, t.CVENumbers, col.ANewColumn})
+                .QueryAsString();
+
+            Debug.WriteLine(q);
+
+            string kql =
+@"Update
+| extend ANewColumn = SubscriptionId
+| distinct InstallTimeAvailable, InstallTimePredictionSeconds, CVENumbers, ANewColumn";
+
+            Assert.Equal(q,kql);
+        }
+
+                [Fact]
+        public void Simple_Distinct_All()
+        {
+            string q = Kusto.New().Update
+                .DistinctAll()
+                .QueryAsString();
+
+            Debug.WriteLine(q);
+
+            string kql =
+@"Update
+| distinct *";
 
             Assert.Equal(q,kql);
         }

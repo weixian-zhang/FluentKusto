@@ -133,6 +133,15 @@ namespace FluentKusto
             return this;
         }
 
+        public ITabularOperator<T> Limit(int rows)
+        {
+            _QB
+                .AppendPipeNewLine("limit")
+                .AppendWithSpace(rows.ToString());
+
+            return this;
+        }
+
         public IKqlExecutor Run()
         {
             return this;
@@ -169,6 +178,35 @@ namespace FluentKusto
             var result = await ExecuteQueryOnAppInsights(tenantId, appId, clientId, clientSecret);
             return new Tuple<QueryResults, string>(result, _QB.Query());
         }
+
+        public ITabularOperator<T> Distinct(Func<T, dynamic, object> func)
+        {
+            var assemFile = Assembly.GetCallingAssembly().Location;
+
+            var decompiler = new CSharpDecompiler(assemFile, new DecompilerSettings());
+
+            var handle = (MethodDefinitionHandle)MetadataTokens.EntityHandle(func.Method.MetadataToken);
+
+            var funcRawCode = decompiler.DecompileAsString(handle);
+
+            string cleanedCode = RawCodeToKusto(funcRawCode);
+
+            string query = ToDistinctSyntax(cleanedCode);
+
+            _QB.AppendPipeNewLine("distinct");
+
+            _QB.AppendWithSpace(query);
+
+            return this;
+        }
+
+        public ITabularOperator<T> DistinctAll()
+        {
+            _QB.AppendPipeNewLine("distinct *");
+
+            return this;
+        }
+
 
         #endregion ITabularOperator
 
@@ -264,6 +302,23 @@ namespace FluentKusto
             string codeWithoutCSharpChars = RemoveCSharpCharsFromCode(codeWithoutCloseCurlyBracEnd, chsarpTypeNames);
 
             return codeWithoutCSharpChars;
+        }
+
+        // take only Property name. E.g = Approved = t.Approved, take on property Approved and not "= = t.Approved"
+        private string ToDistinctSyntax(string cleansedRawCode)
+        {
+            var propNameOnly = new List<string>();
+
+            string[] byComma = cleansedRawCode.Split(",");
+
+            foreach(string c in byComma)
+            {
+                string[] byEqual = c.Split("=");
+
+                propNameOnly.Add(byEqual[0].Trim());
+            }
+
+            return string.Join(", ", propNameOnly.ToArray());
         }
 
         // e.g (Update t, dynamic c), delete "t." and "c."

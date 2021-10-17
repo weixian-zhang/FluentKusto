@@ -9,6 +9,8 @@ namespace FluentKusto
     {
         public ITabularOperator<T> Count();
 
+        public ITabularOperator<T> Limit(int rows);
+
         public ITabularOperator<T> Where(Expression<Func<T,object>> where);
 
         /// Project returns an anonymous object where Member is the projected column name
@@ -20,6 +22,11 @@ namespace FluentKusto
         /// T is kusto table
         /// dynamic type represents dynamic Column that can reference any other extended columns or Kusto syntax
         public ITabularOperator<T> Extend(Func<T, dynamic, object> node);
+
+        public ITabularOperator<T> Distinct(Func<T, dynamic, object> node);
+
+        /// | distinct *
+        public ITabularOperator<T> DistinctAll();
 
         public IJoinOn<T> Join<TRight>
             (JoinKind kind, ITabularOperator<TRight> rightQueryNode);
