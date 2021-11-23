@@ -1,18 +1,30 @@
 using TechTalk.SpecFlow;
+using Xunit;
 
 namespace Test.Spec.Steps
 {
+
+    public class Numbers
+    {
+        public int First { get; set; }
+        public int Second { get; set; }
+        public int Sum { get; set; }
+    }
+
     [Binding]
     public sealed class CalculatorStepDefinitions
     {
-       
+
        // For additional details on SpecFlow step definitions see https://go.specflow.org/doc-stepdef
 
        private readonly ScenarioContext _scenarioContext;
+       private Numbers _numbers;
 
        public CalculatorStepDefinitions(ScenarioContext scenarioContext)
        {
            _scenarioContext = scenarioContext;
+
+           _numbers = new Numbers();
        }
 
        [Given("the first number is (.*)")]
@@ -22,7 +34,9 @@ namespace Test.Spec.Steps
            // For storing and retrieving scenario-specific data see https://go.specflow.org/doc-sharingdata
            // To use the multiline text or the table argument of the scenario,
            // additional string/Table parameters can be defined on the step definition
-           // method. 
+           // method.
+
+            _numbers.First = number;
 
            _scenarioContext.Pending();
        }
@@ -34,15 +48,19 @@ namespace Test.Spec.Steps
            // For storing and retrieving scenario-specific data see https://go.specflow.org/doc-sharingdata
            // To use the multiline text or the table argument of the scenario,
            // additional string/Table parameters can be defined on the step definition
-           // method. 
+           // method.
+
+           _numbers.Second = number;
 
            _scenarioContext.Pending();
         }
-        
+
        [When("the two numbers are added")]
        public void WhenTheTwoNumbersAreAdded()
        {
            //TODO: implement act (action) logic
+
+           _numbers.Sum = _numbers.First + _numbers.Second;
 
            _scenarioContext.Pending();
        }
@@ -50,7 +68,7 @@ namespace Test.Spec.Steps
        [Then("the result should be (.*)")]
        public void ThenTheResultShouldBe(int result)
        {
-           //TODO: implement assert (verification) logic
+           Assert.Equal(_numbers.Sum, result);
 
            _scenarioContext.Pending();
        }
