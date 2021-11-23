@@ -78,7 +78,7 @@ namespace FluentKusto.Tests
             string q = Kusto.New().AzureActivity
                 .Where(t => t.SourceSystem.In("A", "B", "BC", "DE"))
                 .Join<AzureActivity>(JoinKind.rightanti, Kusto.New().AzureActivity)
-                .On<AzureActivity>((left, right) => left.OperationId)
+                    .On<AzureActivity>((left, right) => left.OperationId)
                 .QueryAsString();
 
             Debug.WriteLine(q);
