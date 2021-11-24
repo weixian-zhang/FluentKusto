@@ -33,7 +33,29 @@
                 "WriteSchemaToFiles": "true",
                 "GenerateCSharpFromFiles": "false"
             }
-        }
+        },
+        {
+            "name": "Debug SpecFlow Scenario",
+            "type": "coreclr",
+            "request": "attach",
+            "preLaunchTask": "DotNet Test SpecFlow Wait for Debugger",
+            "processId": "${command:pickProcess}"
+        },
+        // {
+        //     "name": "Debug SpecFlow Scenario",
+        //     "type": "coreclr",
+        //     "request": "launch",
+        //     "preLaunchTask": "build CSharpGenerator",
+        //     "program": "${workspaceFolder}/Test.Spec/bin/Debug/net5.0/testhost.dll",
+        //     "args": [],
+        //     "cwd": "${workspaceFolder}",
+        //     "stopAtEntry": false,
+        //     "console": "internalConsole",
+        //     "env": {
+        //         "WriteSchemaToFiles": "true",
+        //         "GenerateCSharpFromFiles": "true"
+        //     }
+        // },
 
     ]
 }

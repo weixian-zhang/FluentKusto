@@ -37,8 +37,6 @@ namespace Test.Spec.Steps
            // method.
 
             _numbers.First = number;
-
-           _scenarioContext.Pending();
        }
 
        [Given("the second number is (.*)")]
@@ -51,8 +49,6 @@ namespace Test.Spec.Steps
            // method.
 
            _numbers.Second = number;
-
-           _scenarioContext.Pending();
         }
 
        [When("the two numbers are added")]
@@ -61,16 +57,12 @@ namespace Test.Spec.Steps
            //TODO: implement act (action) logic
 
            _numbers.Sum = _numbers.First + _numbers.Second;
-
-           _scenarioContext.Pending();
        }
 
        [Then("the result should be (.*)")]
        public void ThenTheResultShouldBe(int result)
        {
            Assert.Equal(_numbers.Sum, result);
-
-           _scenarioContext.Pending();
        }
     }
 }
