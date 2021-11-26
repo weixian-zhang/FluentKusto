@@ -20,6 +20,7 @@ namespace FluentKusto
 
             //use regex to get main code block
             //(?<=return new\s{)(.*)(?<=};)
+            //sample: "using FluentKusto; internal object <Main>b__0_0(AzureActivity tbl, dynamic col) { return new { DynamicTimeColumn = tbl.TimeGenerated, SplittedRSC = (object)Kql.split(tbl._ResourceId, '/') }; } "
 
             string removeCodeTillCurlyBracket =
                 noBreaklineCode.Substring(noBreaklineCode.IndexOf('{'), noBreaklineCode.Length - noBreaklineCode.IndexOf('{'));
