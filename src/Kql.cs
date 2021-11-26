@@ -18,9 +18,9 @@ namespace FluentKusto
 
         #region datetime funcs
 
-        public static DateTime ago(string timespan)
+        public static dynamic ago(string timespan)
         {
-           return DateTime.Now;
+           return new object();
         }
 
         public static dynamic split(string str, char delimiter)

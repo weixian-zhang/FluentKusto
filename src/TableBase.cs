@@ -55,16 +55,38 @@ namespace FluentKusto
             return this;
         }
 
-        public ITabularOperator<T> Where(Expression<Func<T,object>> expression)
+        public ITabularOperator<T> Where(Func<T, dynamic, object> func)
         {
-            var whereVisitor = new WhereVisitor();
+            //using FluentKusto;\r\n\r\ninternal object <Main>b__0_1(AzureActivity tbl, dynamic col)\r\n{\r\n\treturn tbl.SourceSystem.In(\"Sys A\", \"Sys B\", \"Sys X\") && col.DynamicTimeColumn > Kql.ago(\"8h\");\r\n}\r\n
 
-            string query = whereVisitor.ParseQuery(expression.Body);
+           var assemFile = Assembly.GetCallingAssembly().Location;
 
-            _QB.Append(query);
+            var decompiler = new CSharpDecompiler(assemFile, new DecompilerSettings());
+
+            var handle = (MethodDefinitionHandle)MetadataTokens.EntityHandle(func.Method.MetadataToken);
+
+            var funcRawCode = decompiler.DecompileAsString(handle);
+
+            string query = WhereOperatorFuncRawCodeParser
+                .ParseRawCodeToKustoWithoutNewAnonymousObject(funcRawCode);
+
+            _QB.AppendPipeNewLine("where");
+
+            _QB.AppendWithSpace(query);
 
             return this;
         }
+
+        // public ITabularOperator<T> Where(Expression<Func<T,object>> expression)
+        // {
+        //     var whereVisitor = new WhereVisitor();
+
+        //     string query = whereVisitor.ParseQuery(expression.Body);
+
+        //     _QB.Append(query);
+
+        //     return this;
+        // }
 
         // raw code e.g:
         // internal object <Main>b__0_0(Update t, dynamic c)\r\n{\r\n\treturn new\r\n\t{\r\n\t\tResourceArray = (object)Kql.split(c.id_s, '/'),\r\n\t\tSecondLastResourceElement = (object)c.ResourceArray[0]\r\n\t};\r\n}\r\n"
@@ -78,7 +100,7 @@ namespace FluentKusto
 
             var funcRawCode = decompiler.DecompileAsString(handle);
 
-            string query = RawCodeToKusto(funcRawCode);
+            string query = FuncRawCodeParser.ParseRawCodeToKustoWithNewAnonymousObject(funcRawCode);
 
             _QB.AppendPipeNewLine("extend");
 
@@ -97,7 +119,7 @@ namespace FluentKusto
 
             var funcRawCode = decompiler.DecompileAsString(handle);
 
-            string query = RawCodeToKusto(funcRawCode);
+            string query = FuncRawCodeParser.ParseRawCodeToKustoWithNewAnonymousObject(funcRawCode);
 
             _QB.AppendPipeNewLine("project");
 
@@ -189,7 +211,7 @@ namespace FluentKusto
 
             var funcRawCode = decompiler.DecompileAsString(handle);
 
-            string cleanedCode = RawCodeToKusto(funcRawCode);
+            string cleanedCode = FuncRawCodeParser.ParseRawCodeToKustoWithNewAnonymousObject(funcRawCode);
 
             string query = ToDistinctSyntax(cleanedCode);
 
@@ -275,36 +297,37 @@ namespace FluentKusto
 
             var funcRawCode = decompiler.DecompileAsString(handle);
 
-            string query = RawCodeToKusto(funcRawCode);
+            string query = FuncRawCodeParser.ParseRawCodeToKustoWithNewAnonymousObject(funcRawCode);
 
             return query;
         }
 
-         private string RawCodeToKusto(string code)
-        {
-            List<string> chsarpTypeNames = GetCSharpCharsToRemoveFromCode(code);
+        // private string ParseRawCodeToKustoWithNewAnonymousObject(string code)
+        // {
+        //     List<string> chsarpTypeNames = GetCSharpCharsToRemoveFromCode(code);
 
-            string noBreaklineCode = Regex.Replace(Regex.Replace(code, @"\n|\r", " "), @"\s+", " ");
+        //     string noBreaklineCode = Regex.Replace(Regex.Replace(code, @"\n|\r", " "), @"\s+", " ");
 
-            string removeCodeTillCurlyBracket =
-                noBreaklineCode.Substring(noBreaklineCode.IndexOf('{'), noBreaklineCode.Length - noBreaklineCode.IndexOf('{'));
+        //     string removeCodeTillCurlyBracket =
+        //         noBreaklineCode.Substring(noBreaklineCode.IndexOf('{'), noBreaklineCode.Length - noBreaklineCode.IndexOf('{'));
 
-            string removeObjectCasting = removeCodeTillCurlyBracket.Replace("(object)", "");
+        //     string removeObjectCasting = removeCodeTillCurlyBracket.Replace("(object)", "");
 
-            int indexOfEndOfCurlyBrac = removeObjectCasting.IndexOf("new ") + "new ".Length;
+        //     int indexOfEndOfCurlyBrac = removeObjectCasting.IndexOf("new ") + "new ".Length;
 
-            int lastIndexOfCurlyBrac = removeObjectCasting.LastIndexOf("}") -1;
+        //     int lastIndexOfCurlyBrac = removeObjectCasting.LastIndexOf("}") -1;
 
-            string removeUpToReturnStatement = removeObjectCasting.Substring(indexOfEndOfCurlyBrac);
+        //     string removeUpToReturnStatement = removeObjectCasting.Substring(indexOfEndOfCurlyBrac);
 
-            string codeWithoutCloseCurlyBracEnd =  removeUpToReturnStatement.Remove(removeUpToReturnStatement.LastIndexOf('}') - 1, 2);
+        //     string codeWithoutCloseCurlyBracEnd =  removeUpToReturnStatement.Remove(removeUpToReturnStatement.LastIndexOf('}') - 1, 2);
 
-            string codeWithoutCSharpChars = RemoveCSharpCharsFromCode(codeWithoutCloseCurlyBracEnd, chsarpTypeNames);
+        //     string codeWithoutCSharpChars = RemoveCSharpCharsFromCode(codeWithoutCloseCurlyBracEnd, chsarpTypeNames);
 
-            return codeWithoutCSharpChars;
-        }
+        //     return codeWithoutCSharpChars;
+        // }
 
-        // take only Property name. E.g = Approved = t.Approved, take on property Approved and not "= = t.Approved"
+        // take only Property name. E.g = Approved = t.Approved,
+        // take on property Approved and not "== t.Approved"
         private string ToDistinctSyntax(string cleansedRawCode)
         {
             var propNameOnly = new List<string>();
@@ -338,7 +361,7 @@ namespace FluentKusto
         {
              var typeNames = new List<string>(new string[]{"Kql.", "{", "}", ";"});
 
-            Tuple<string, string> paramVars = GetFuncParamerVariables(code);
+            Tuple<string, string> paramVars = GetFuncParamerNames(code);
 
             string param1 = paramVars.Item1 + ".";
             string param2 = paramVars.Item2 + ".";
@@ -350,7 +373,7 @@ namespace FluentKusto
         }
 
         // e.g (Update t, dynamic c), get "t" and "c" variable names to remove them later
-        private Tuple<string, string> GetFuncParamerVariables(string code)
+        private Tuple<string, string> GetFuncParamerNames(string code)
         {
             string param1 = "";
             string param2 = "";

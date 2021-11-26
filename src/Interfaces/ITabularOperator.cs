@@ -11,7 +11,8 @@ namespace FluentKusto
 
         public ITabularOperator<T> Limit(int rows);
 
-        public ITabularOperator<T> Where(Expression<Func<T,object>> where);
+        //public ITabularOperator<T> Where(Expression<Func<T, object>> where);
+        public ITabularOperator<T> Where(Func<T, dynamic, object> where);
 
         /// Project returns an anonymous object where Member is the projected column name
         /// T is kusto table
