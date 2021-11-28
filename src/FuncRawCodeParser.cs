@@ -14,30 +14,40 @@ namespace FluentKusto
 
         public static string ParseRawCodeToKustoWithNewAnonymousObject(string code)
         {
-            List<string> chsarpTypeNames = GetCSharpCharsToRemoveFromCode(code);
+            string codeWithFuncParamNames = RemoveFuncParamaterNames(code);
 
-            string noBreaklineCode = RemoveBreakline(code);
+            string noBreaklineCode = RemoveBreakline(codeWithFuncParamNames);
 
             //use regex to get main code block
             //(?<=return new\s{)(.*)(?<=};)
             //sample: "using FluentKusto; internal object <Main>b__0_0(AzureActivity tbl, dynamic col) { return new { DynamicTimeColumn = tbl.TimeGenerated, SplittedRSC = (object)Kql.split(tbl._ResourceId, '/') }; } "
 
-            string removeCodeTillCurlyBracket =
-                noBreaklineCode.Substring(noBreaklineCode.IndexOf('{'), noBreaklineCode.Length - noBreaklineCode.IndexOf('{'));
+            string outMainCodeBlock = "";
+            if(!GetMainCodeBlock(noBreaklineCode, out outMainCodeBlock))
+                throw new Exception($"Not able to find parsable code block from decompiled Func: {code}");
 
-            string removeObjectCasting = removeCodeTillCurlyBracket.Replace("(object)", "");
+            string removeObjectCasting = outMainCodeBlock.Replace("(object)", "");
 
-            int indexOfEndOfCurlyBrac = removeObjectCasting.IndexOf("new ") + "new ".Length;
+            string kqlFuncRemoved = FuncRawCodeParser.RemoveKqlFuncs(removeObjectCasting);
 
-            int lastIndexOfCurlyBrac = removeObjectCasting.LastIndexOf("}") -1;
+            return kqlFuncRemoved.Trim();
+        }
 
-            string removeUpToReturnStatement = removeObjectCasting.Substring(indexOfEndOfCurlyBrac);
+        private static bool GetMainCodeBlock(string rawCode, out string mainCodeBlock)
+        {
 
-            string codeWithoutCloseCurlyBracEnd =  removeUpToReturnStatement.Remove(removeUpToReturnStatement.LastIndexOf('}') - 1, 2);
+            //regex lookaround, match any character until ";" is found without counting in ";"
+            var match = Regex.Match(rawCode, @"(?<=return\snew\s{)(.*)(?=\s};)");
 
-            string codeWithoutCSharpChars = RemoveCSharpCharsFromCode(codeWithoutCloseCurlyBracEnd, chsarpTypeNames);
+            if(!match.Success)
+            {
+                mainCodeBlock = rawCode;
+                return false;
+            }
 
-            return codeWithoutCSharpChars;
+            mainCodeBlock = match.Value;
+
+            return true;
         }
 
         // e.g (Update t, dynamic c), delete "t." and "c."
@@ -53,19 +63,17 @@ namespace FluentKusto
             return codeNoTypes.Trim();
         }
 
-        private static List<string> GetCSharpCharsToRemoveFromCode(string code)
+        private static string RemoveFuncParamaterNames(string code)
         {
-             var typeNames = new List<string>(new string[]{"{", "}", ";"});
-
             Tuple<string, string> paramVars = GetFuncParameterNames(code);
 
             string param1 = paramVars.Item1 + ".";
             string param2 = paramVars.Item2 + ".";
 
-            typeNames.Add(param1);
-            typeNames.Add(param2);
+            code = code.Replace(param1, "");
+            code = code.Replace(param2, "");
 
-            return typeNames;
+            return code.Trim();
         }
 
         public static string RemoveBreakline(string rawCode)

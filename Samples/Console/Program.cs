@@ -19,7 +19,8 @@ namespace FluentInterface.Samples.Console
             string whereWithExtendWithStringFuncs = Kusto.New().AzureActivity
             .Extend((tbl, col) => new {
                 DynamicTimeColumn =  tbl.TimeGenerated,
-                SplittedRSC = Kql.split(tbl._ResourceId, '/')
+                SplittedRSC = Kql.split(tbl._ResourceId, '/'),
+                SubId = tbl.SubscriptionId
             })
             // .Where((tbl, col) =>
             //     tbl.SourceSystem.In("Sys A", "Sys B", "Sys X") &&

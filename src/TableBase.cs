@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -236,18 +237,26 @@ namespace FluentKusto
 
         private async Task<LogsQueryResult> ExecuteQueryOnLAW(string workspaceId)
         {
-            var azcred = new DefaultAzureCredential();
+            try
+            {
+                var azcred = new DefaultAzureCredential();
 
-            var kqlClient = new LogsQueryClient(azcred);
+                var kqlClient = new LogsQueryClient(azcred);
 
-            string query = _QB.Query();
+                string query = _QB.Query();
 
-            Response<LogsQueryResult> response =
-                await kqlClient.QueryWorkspaceAsync(workspaceId, query, new QueryTimeRange());
+                Response<LogsQueryResult> response =
+                    await kqlClient.QueryWorkspaceAsync(workspaceId, query, new QueryTimeRange());
 
-            LogsQueryResult result =  response.Value;
+                LogsQueryResult result =  response.Value;
 
-            return result;
+                return result;
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
+                throw;
+            }
         }
 
         private async Task<QueryResults> ExecuteQueryOnAppInsights
@@ -276,7 +285,8 @@ namespace FluentKusto
             }
             catch(Exception ex)
             {
-                throw ex;
+                Debug.WriteLine(ex.ToString());
+                throw;
             }
         }
 
